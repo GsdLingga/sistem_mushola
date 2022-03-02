@@ -17,13 +17,11 @@ class IsPengurus
      */
     public function handle(Request $request, Closure $next)
     {
-        if (!Auth::check()) {
-            return route('login');
+        if (Auth::check()) {
+            if (auth()->user()->role == 'Pengurus') {
+                return $next($request);   
+            }
         }
-        if (auth()->user()->role == 'Pengurus') {
-            return $next($request);   
-        }
-
-        return redirect()->back();
+        abort(403, 'Unauthorized action.');
     }
 }

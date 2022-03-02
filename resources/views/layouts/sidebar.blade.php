@@ -10,7 +10,7 @@
                 <li class="menu-title">Menu</li>
                 @if (auth()->user()->role == 'Admin')
                     <li>
-                        <a href="index.html" class="waves-effect">
+                        <a href="{{route('admin.dashboard')}}" class="waves-effect">
                             <i class="ri-dashboard-line"></i>
                             {{-- <span class="badge badge-pill badge-success float-right">3</span> --}}
                             <span>Dashboard</span>
@@ -18,7 +18,7 @@
                     </li>
                 
                     <li>
-                        <a href="calendar.html" class=" waves-effect">
+                        <a href="{{route('user.index')}}" class=" waves-effect">
                             <i class="ri-user-line"></i>
                             <span>User</span>
                         </a>
@@ -38,7 +38,38 @@
                             <span>Dashboard</span>
                         </a>
                     </li>
+                @elseif (auth()->user()->role == 'Guru')
+                    <li>
+                        <a href="index.html" class="waves-effect">
+                            <i class="ri-dashboard-line"></i>
+                            {{-- <span class="badge badge-pill badge-success float-right">3</span> --}}
+                            <span>Dashboard</span>
+                        </a>
+                    </li>
+                @endif
+                @if (auth()->user()->role == 'Admin' || auth()->user()->role == 'Guru')
+                <li>
+                    <a href="calendar.html" class=" waves-effect">
+                            <i class="ri-file-list-2-line"></i>
+                            <span>Nilai</span>
+                        </a>
+                    </li>
 
+                    <li>
+                        <a href="calendar.html" class=" waves-effect">
+                            <i class="ri-book-line"></i>
+                            <span>Rapot</span>
+                        </a>
+                    </li>
+
+                    <li>
+                        <a href="calendar.html" class=" waves-effect">
+                            <i class="ri-file-paper-2-line"></i>
+                            <span>Absen</span>
+                        </a>
+                    </li>    
+                @endif 
+                @if (auth()->user()->role == 'Admin' || auth()->user()->role == 'Pengurus')
                     <li>
                         <a href="calendar.html" class=" waves-effect">
                             <i class="ri-coin-line"></i>
@@ -58,36 +89,7 @@
                             <i class="ri-calendar-2-line"></i>
                             <span>Jadwal</span>
                         </a>
-                    </li>  
-                @elseif (auth()->user()->role == 'Guru')
-                    <li>
-                        <a href="index.html" class="waves-effect">
-                            <i class="ri-dashboard-line"></i>
-                            {{-- <span class="badge badge-pill badge-success float-right">3</span> --}}
-                            <span>Dashboard</span>
-                        </a>
-                    </li>
-                    
-                    <li>
-                        <a href="calendar.html" class=" waves-effect">
-                            <i class="ri-file-list-2-line"></i>
-                            <span>Nilai</span>
-                        </a>
-                    </li>
-
-                    <li>
-                        <a href="calendar.html" class=" waves-effect">
-                            <i class="ri-book-line"></i>
-                            <span>Rapot</span>
-                        </a>
-                    </li>
-
-                    <li>
-                        <a href="calendar.html" class=" waves-effect">
-                            <i class="ri-file-paper-2-line"></i>
-                            <span>Absen</span>
-                        </a>
-                    </li>
+                    </li> 
                 @endif
 
                 {{-- <li>

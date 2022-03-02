@@ -17,13 +17,11 @@ class IsGuru
      */
     public function handle(Request $request, Closure $next)
     {
-        if (!Auth::check()) {
-            return route('login');
+        if (Auth::check()) {
+            if (auth()->user()->role == 'Guru') {
+                return $next($request);   
+            }
         }
-        if (auth()->user()->role == 'Guru') {
-            return $next($request);   
-        }
-
-        return redirect()->back();
+        abort(403, 'Unauthorized action.');
     }
 }
