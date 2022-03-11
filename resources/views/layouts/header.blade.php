@@ -3,7 +3,13 @@
         <div class="d-flex">
             <!-- LOGO -->
             <div class="navbar-brand-box">
-                <a href="index.html" class="logo logo-dark">
+                @if (auth()->user()->role == 'Admin')
+                <a href="{{route('admin.dashboard')}}" class="logo logo-dark">
+                @elseif(auth()->user()->role == 'Pengurus')
+                <a href="{{route('pengurus.dashboard')}}" class="logo logo-dark">
+                @elseif(auth()->user()->role == 'Guru')
+                <a href="{{route('guru.dashboard')}}" class="logo logo-dark"> 
+                @endif
                     <span class="logo-sm">
                         <img src="{{asset('assets/images/logo-sm-dark.png')}}" alt="" height="22">
                     </span>
@@ -11,8 +17,13 @@
                         <img src="{{asset('assets/images/logo-dark.png')}}" alt="" height="20">
                     </span>
                 </a>
-
-                <a href="index.html" class="logo logo-light">
+                @if (auth()->user()->role == 'Admin')
+                <a href="{{route('admin.dashboard')}}" class="logo logo-light">
+                @elseif(auth()->user()->role == 'Pengurus')
+                <a href="{{route('pengurus.dashboard')}}" class="logo logo-light">
+                @elseif(auth()->user()->role == 'Guru')
+                <a href="{{route('guru.dashboard')}}" class="logo logo-light"> 
+                @endif
                     <span class="logo-sm">
                         <img src="{{asset('assets/images/logo-sm-light.png')}}" alt="" height="22">
                     </span>

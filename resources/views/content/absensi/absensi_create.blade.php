@@ -1,5 +1,5 @@
 @extends('layouts.app2')
-@section('title', 'Kelola Siswa')
+@section('title', 'Kelola Absensi')
 @push('css')
     <link href="{{asset('assets/libs/datatables.net-buttons-bs4/css/buttons.bootstrap4.min.css')}}" rel="stylesheet" type="text/css" />
     <link href="{{asset('assets/libs/datatables.net-select-bs4/css/select.bootstrap4.min.css')}}" rel="stylesheet" type="text/css" />
@@ -10,11 +10,11 @@
     <div class="row">
         <div class="col-12">
             <div class="page-title-box d-flex align-items-center justify-content-between">
-                <h4 class="mb-0">Siswa</h4>
+                <h4 class="mb-0">Absensi</h4>
 
-                <a href="{{route('siswa.create')}}" type="button" class="btn btn-primary waves-effect waves-light" style="color: white;">
-                    <i class="mdi mdi-account-plus align-middle mr-2"></i> Tambah Siswa
-                </a>
+                {{-- <a href="{{route('absensi.create')}}" type="button" class="btn btn-primary waves-effect waves-light" style="color: white;">
+                    <i class="mdi mdi-account-plus align-middle mr-2"></i> Tambah Absensi
+                </a> --}}
 
                 {{-- <div class="page-title-right">
                     <ol class="breadcrumb m-0">
@@ -67,46 +67,43 @@
                         </div> --}}
                     </div>
 
-                    <h4 class="card-title mb-4">Daftar Siswa</h4>
+                    <h4 class="card-title mb-4">Absensi</h4>
                     {{-- <p class="card-title-desc">
                         This example shows the multi option. Note how a click on a row will toggle its selected state without effecting other rows,
                         unlike the os and single options shown in other examples.
                     </p> --}}
-
-                    <table id="datatable" class="table table-bordered dt-responsive nowrap" style="border-collapse: collapse; border-spacing: 0; width: 100%;">
-                        <thead>
-                            <tr>
-                                <th>No</th>
-                                <th>Nama</th>
-                                <th>Tanggal Lahir</th>
-                                <th>Jenis Kelamin</th>
-                                <th>Alamat</th>
-                                <th>Telepon</th>
-                                <th>Action</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            @foreach ($siswa as $siswas)
+                    <form class="custom-validation" action="{{ route('absensi.store') }}" method="POST">
+                        @csrf
+                        <table id="datatable" class="table table-bordered dt-responsive nowrap" style="border-collapse: collapse; border-spacing: 0; width: 100%;">
+                            <thead>
                                 <tr>
-                                    <td>{{ $loop->iteration }}</td>
-                                    <td>{{ $siswas->nama }}</td>
-                                    <td>{{ Carbon\Carbon::parse($siswas->tgl_lahir)->translatedFormat('d F Y') }}</td>
-                                    <td>{{ Str::ucfirst($siswas->jenis_kelamin)  }}</td>
-                                    <td>{{ $siswas->alamat }}</td>
-                                    <td>{{ $siswas->telepon }}</td>
-                                    <td>
-                                        <a href="{{route('siswa.edit', $siswas->id)}}" class="mr-3 text-primary" data-toggle="tooltip" data-placement="top" title="" data-original-title="Edit"><i class="mdi mdi-pencil font-size-18"></i></a>
-                                        <form action="{{route('siswa.update', $siswas->id)}}" method="POST" style="display: contents;">
-                                            @method('PUT')
-                                            @csrf
-                                            <button class="text-danger" style="background-color: transparent; border: 0;" data-toggle="tooltip" data-placement="top" title="" data-original-title="Delete"><i class="mdi mdi-trash-can font-size-18"></i></button>
-                                        </form>
-                                    </td>
+                                    <th style="width: 20px;">
+                                        <div class="custom-control custom-checkbox">
+                                            <input type="checkbox" class="custom-control-input" id="ordercheck">
+                                            <label class="custom-control-label" for="ordercheck">&nbsp;</label>
+                                        </div>
+                                    </th>
+                                    <th>Nama</th>
                                 </tr>
-                            @endforeach
-                        </tbody>
-                    </table>
-                
+                            </thead>
+                            <tbody>
+                                @foreach ($absensi as $absen)
+                                    <tr>
+                                        <td>
+                                            <div class="custom-control custom-checkbox">
+                                                <input type="checkbox" class="custom-control-input" id="ordercheck{{ $loop->iteration }}"  name="id_absen[]" value="{{ $absen->id }}">
+                                                <label class="custom-control-label" for="ordercheck{{ $loop->iteration }}">&nbsp;</label>
+                                            </div>
+                                        </td>
+                                        <td>{{ $absen->nama }}</td>
+                                    </tr>
+                                @endforeach
+                            </tbody>
+                        </table>
+                        <button type="submit" class="btn btn-primary waves-effect waves-light mr-1">
+                            Submit
+                        </button>
+                    </form>
                 </div> <!-- end card body-->
             </div> <!-- end card -->
         </div><!-- end col-->

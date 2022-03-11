@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\Models\Siswa;
+use Carbon\Carbon;
 
 class SiswaController extends Controller
 {
@@ -13,7 +15,14 @@ class SiswaController extends Controller
      */
     public function index()
     {
-        return view('content.siswa.siswa_index');
+        Carbon::setLocale('id');
+
+        $siswa = Siswa::get();
+
+        return view('content.siswa.siswa_index', compact(
+            'siswa'
+        ));
+        // return Carbon::parse($siswa[0]->tgl_lahir)->translatedFormat('l jS F Y');;
     }
 
     /**
@@ -23,7 +32,7 @@ class SiswaController extends Controller
      */
     public function create()
     {
-        //
+        return view('content.siswa.siswa_create');
     }
 
     /**
@@ -34,7 +43,28 @@ class SiswaController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $siswa = $request->validate([
+            'name' => ['required', 'string', 'max:255'],
+            'tgl_lahir' => ['required', 'date'],
+            'jenis_kelamin' => ['required', 'string'],
+            'alamat' => ['required', 'string', 'max:255'],
+            'telepon' => ['required', 'string', 'numeric', 'digits_between:10,13'],
+        ]);
+
+        
+        $siswa  = Siswa::create([
+            'nama'      => $request->name,
+            'tgl_lahir'     => $request->tgl_lahir,
+            'jenis_kelamin'  => $request->jenis_kelamin,
+            'alamat'      => $request->alamat,
+            'telepon'   => $request->telepon,
+            // 'slug'      => Str::slug($request->name),
+        ]);
+
+        return redirect()->route('siswa.index')->with('success', 'Siswa Created Successfully');
+        
+
+        // return $siswa;
     }
 
     /**

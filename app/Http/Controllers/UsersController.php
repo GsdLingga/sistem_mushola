@@ -47,7 +47,7 @@ class UsersController extends Controller
             'name' => ['required', 'string', 'max:255'],
             'email' => ['required', 'string', 'email', 'max:255'],
             'telepon' => ['required', 'string', 'numeric', 'digits_between:10,13'],
-            'password' => ['required', 'string', 'min:8', 'confirmed'],
+            'password' => ['required', 'string', 'min:7', 'confirmed'],
             'role' => ['required'],
         ]);
 
