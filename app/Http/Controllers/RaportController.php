@@ -3,11 +3,8 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\Models\Siswa;
-use App\Models\Spp;
-use Illuminate\Support\Facades\DB;
 
-class SppController extends Controller
+class RaportController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -16,15 +13,7 @@ class SppController extends Controller
      */
     public function index()
     {
-        // $spp = Spp::get();
-        $spp = DB::table('spp')
-        ->join('siswa','siswa.id','=','spp.id_siswa')
-        ->select('spp.id','siswa.nama','spp.tgl')
-        ->get();
-
-        return view('content.spp.spp_index', compact(
-            'spp'
-        ));
+        //
     }
 
     /**
@@ -34,10 +23,7 @@ class SppController extends Controller
      */
     public function create()
     {
-        $siswa = Siswa::get();
-        return view('content.spp.spp_create', compact(
-            'siswa'
-        ));
+        //
     }
 
     /**
@@ -48,19 +34,7 @@ class SppController extends Controller
      */
     public function store(Request $request)
     {
-        $spp = $request->validate([
-            'nama' => ['required'],
-            'tanggal' => ['required', 'date'],
-        ]);
-
-        
-        $spp  = Spp::create([
-            'id_siswa'      => $request->nama,
-            'tgl'           => $request->tanggal,
-        ]);
-
-        return redirect()->route('spp.index')->with('success', 'SPP Created Successfully');
-        // return $request->all();
+        //
     }
 
     /**

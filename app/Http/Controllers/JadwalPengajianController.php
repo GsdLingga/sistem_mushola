@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\Models\JadwalPengajian;
+use Carbon\Carbon;
 
 class JadwalPengajianController extends Controller
 {
@@ -13,7 +15,19 @@ class JadwalPengajianController extends Controller
      */
     public function index()
     {
-        //
+        Carbon::setLocale('id');
+
+        $jadwal_pengajian = JadwalPengajian::get();
+
+        // $siswa = Siswa::get();
+
+        // return view('content.jadwal_pengajian.jadwal_pengajian_index', compact(
+        //     'siswa'
+        // ));
+        return view('content.jadwal_pengajian.jadwal_pengajian_index', compact(
+            'jadwal_pengajian'
+        ));
+        // return $jadwal_pengajian;
     }
 
     /**
@@ -23,7 +37,7 @@ class JadwalPengajianController extends Controller
      */
     public function create()
     {
-        //
+        return view('content.jadwal_pengajian.jadwal_pengajian_create');
     }
 
     /**
@@ -34,7 +48,19 @@ class JadwalPengajianController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $jadwal = $request->validate([
+            'waktu' => ['required', 'date_format:H:i'],
+            'tanggal' => ['required', 'date'],
+        ]);
+
+        
+        $jadwal  = JadwalPengajian::create([
+            'waktu'       => $request->waktu,
+            'tanggal'     => $request->tanggal,
+        ]);
+
+        return redirect()->route('jadwal-pengajian.index')->with('success', 'Jadwal Pengajian Created Successfully');
+        // return $request->all();
     }
 
     /**

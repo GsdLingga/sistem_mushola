@@ -44,12 +44,13 @@ Route::prefix('guru')->middleware('is_guru')->group(function(){
 });
 
 Route::middleware('is_adminpengurus')->group(function () {
-    Route::get('spp', [SppController::class,'index'])->name('spp');
-    Route::get('zakat', [ZakatController::class,'index'])->name('zakat');
-    Route::get('jadwal-pengajian', [JadwalPengajianController::class,'index'])->name('jadwal-pengajian');
+    Route::resource('spp', SppController::class);
+    Route::resource('zakat', ZakatController::class);
+    Route::resource('jadwal-pengajian', JadwalPengajianController::class);
 });
 
 Route::middleware('is_adminguru')->group(function () {
     Route::resource('siswa', SiswaController::class);
     Route::resource('absensi', AbsensiController::class);
+    Route::resource('raport', RaportController::class);
 });

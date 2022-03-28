@@ -8,4 +8,11 @@ use Illuminate\Database\Eloquent\Model;
 class JadwalPengajian extends Model
 {
     use HasFactory;
+    public $timestamps = false;
+    protected $table = 'jadwal_pengajian';
+    protected $primaryKey = 'id';
+    protected $fillable = [
+        'waktu',
+        'tanggal',
+    ];
 }

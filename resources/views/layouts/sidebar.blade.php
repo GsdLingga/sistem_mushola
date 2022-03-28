@@ -24,12 +24,12 @@
                         </a>
                     </li>
 
-                    <li>
+                    {{-- <li>
                         <a href="javascript: void(0);" class=" waves-effect">
                             <i class="ri-folder-3-line"></i>
                             <span>Laporan</span>
                         </a>
-                    </li>
+                    </li> --}}
                 @elseif (auth()->user()->role == 'Pengurus')
                     <li>
                         <a href="{{route('pengurus.dashboard')}}" class="waves-effect">
@@ -55,7 +55,7 @@
                         </a>
                         <ul class="sub-menu" aria-expanded="false">
                             <li><a href="{{route('siswa.index')}}">Daftar Siswa</a></li>
-                            <li><a href="javascript: void(0);">Nilai</a></li>
+                            {{-- <li><a href="javascript: void(0);">Nilai</a></li> --}}
                             <li><a href="javascript: void(0);">Raport</a></li>
                             <li><a href="{{route('absensi.index')}}">Absen</a></li>
                         </ul>
@@ -83,23 +83,23 @@
                 @endif 
                 @if (auth()->user()->role == 'Admin' || auth()->user()->role == 'Pengurus')
                     <li>
-                        <a href="javascript: void(0);" class=" waves-effect">
+                        <a href="{{route('zakat.index')}}" class=" waves-effect">
                             <i class="ri-coin-line"></i>
                             <span>Zakat</span>
                         </a>
                     </li>
 
                     <li>
-                        <a href="javascript: void(0);" class=" waves-effect">
+                        <a href="{{route('spp.index')}}" class=" waves-effect">
                             <i class="ri-red-packet-line"></i>
                             <span>SPP</span>
                         </a>
                     </li>
 
                     <li>
-                        <a href="javascript: void(0);" class=" waves-effect">
+                        <a href="{{route('jadwal-pengajian.index')}}" class=" waves-effect">
                             <i class="ri-calendar-2-line"></i>
-                            <span>Jadwal</span>
+                            <span>Jadwal Pengajian</span>
                         </a>
                     </li> 
                 @endif

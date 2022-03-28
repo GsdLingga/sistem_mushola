@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\Models\Zakat;
 
 class ZakatController extends Controller
 {
@@ -13,7 +14,12 @@ class ZakatController extends Controller
      */
     public function index()
     {
-        //
+        $zakat = Zakat::get();
+
+        return view('content.zakat.zakat_index', compact(
+            'zakat'
+        ));
+        // return $zakat;
     }
 
     /**
@@ -23,7 +29,7 @@ class ZakatController extends Controller
      */
     public function create()
     {
-        //
+        return view('content.zakat.zakat_create');
     }
 
     /**
@@ -34,7 +40,22 @@ class ZakatController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $zakat = $request->validate([
+            'name' => ['required', 'string', 'max:255'],
+            'tgl' => ['required', 'date'],
+            'keterangan' => ['required', 'string', 'numeric'],
+        ]);
+
+        
+        $zakat  = Zakat::create([
+            'nama'  => $request->name,
+            'tgl'   => $request->tgl,
+            'ket'   => $request->keterangan,
+        ]);
+
+        return redirect()->route('zakat.index')->with('success', 'Zakat Created Successfully');
+        // return $request->all();
+
     }
 
     /**
