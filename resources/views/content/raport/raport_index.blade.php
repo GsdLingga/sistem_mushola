@@ -78,10 +78,10 @@
                             <tr>
                                 <th>No</th>
                                 <th>Nama</th>
-                                <th>Tanggal Lahir</th>
-                                <th>Jenis Kelamin</th>
-                                <th>Alamat</th>
-                                <th>Telepon</th>
+                                <th>Nilai Bacaan</th>
+                                <th>Nilai Hafalan</th>
+                                <th>Nilai Praktek</th>
+                                <th>Nilai PAI</th>
                                 <th>Action</th>
                             </tr>
                         </thead>
@@ -90,10 +90,10 @@
                                 <tr>
                                     <td>{{ $loop->iteration }}</td>
                                     <td>{{ $raports->nama }}</td>
-                                    <td>{{ Carbon\Carbon::parse($raports->tgl_lahir)->translatedFormat('d F Y') }}</td>
-                                    <td>{{ Str::ucfirst($raports->jenis_kelamin)  }}</td>
-                                    <td>{{ $raports->alamat }}</td>
-                                    <td>{{ $raports->telepon }}</td>
+                                    <td>{{ $raports->nilai_bacaan }}</td>
+                                    <td>{{ $raports->nilai_hafalan  }}</td>
+                                    <td>{{ $raports->nilai_praktek }}</td>
+                                    <td>{{ $raports->nilai_pai }}</td>
                                     <td>
                                         <a href="{{route('raport.edit', $raports->id)}}" class="mr-3 text-primary" data-toggle="tooltip" data-placement="top" title="" data-original-title="Edit"><i class="mdi mdi-pencil font-size-18"></i></a>
                                         <form action="{{route('raport.update', $raports->id)}}" method="POST" style="display: contents;">

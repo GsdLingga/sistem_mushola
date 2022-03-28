@@ -10,6 +10,7 @@ use App\Http\Controllers\JadwalPengajianController;
 use App\Http\Controllers\ZakatController;
 use App\Http\Controllers\SppController;
 use App\Http\Controllers\AbsensiController;
+use App\Http\Controllers\RaportController;
 
 /*
 |--------------------------------------------------------------------------
