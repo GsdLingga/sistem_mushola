@@ -16,5 +16,6 @@ class Siswa extends Model
         'jenis_kelamin',
         'alamat',
         'telepon',
+        'status',
     ];
 }

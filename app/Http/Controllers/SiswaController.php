@@ -17,7 +17,7 @@ class SiswaController extends Controller
     {
         Carbon::setLocale('id');
 
-        $siswa = Siswa::get();
+        $siswa = Siswa::where('status','=','1')->get();
 
         return view('content.siswa.siswa_index', compact(
             'siswa'
@@ -58,6 +58,7 @@ class SiswaController extends Controller
             'jenis_kelamin'  => $request->jenis_kelamin,
             'alamat'      => $request->alamat,
             'telepon'   => $request->telepon,
+            'status'   => 1,
             // 'slug'      => Str::slug($request->name),
         ]);
 
@@ -86,7 +87,11 @@ class SiswaController extends Controller
      */
     public function edit($id)
     {
-        //
+        $siswa = Siswa::where('id','=',$id)->first();
+        return view('content.siswa.siswa_edit', compact(
+            'siswa'
+        ));
+        // return $siswa;
     }
 
     /**
@@ -98,7 +103,23 @@ class SiswaController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        $siswa = $request->validate([
+            'name' => ['required', 'string', 'max:255'],
+            'tgl_lahir' => ['required', 'date'],
+            'jenis_kelamin' => ['required', 'string'],
+            'alamat' => ['required', 'string', 'max:255'],
+            'telepon' => ['required', 'string', 'numeric', 'digits_between:10,13'],
+        ]);
+
+        $siswa = Siswa::find($id);
+        $siswa->nama            = $request->name;
+        $siswa->tgl_lahir       = $request->tgl_lahir;
+        $siswa->jenis_kelamin   = $request->jenis_kelamin;
+        $siswa->alamat          = $request->alamat;
+        $siswa->telepon         = $request->telepon;
+        $siswa->save();
+
+        return redirect()->route('siswa.index')->with('success', 'Siswa Edit Successfully');
     }
 
     /**
@@ -109,6 +130,11 @@ class SiswaController extends Controller
      */
     public function destroy($id)
     {
-        //
+        $siswa = Siswa::find($id);
+        $siswa->status = 0;
+        
+        $siswa->save();
+
+        return redirect()->route('siswa.index')->with('success', 'Siswa Deleted Successfully');
     }
 }
