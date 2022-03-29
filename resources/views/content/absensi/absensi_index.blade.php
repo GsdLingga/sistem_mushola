@@ -92,8 +92,8 @@
                                     <td>{{ Carbon\Carbon::parse($absen->tgl)->translatedFormat('d F Y') }}</td>
                                     <td>
                                         {{-- <a href="{{route('absensi.edit', $absen->id)}}" class="mr-3 text-primary" data-toggle="tooltip" data-placement="top" title="" data-original-title="Edit"><i class="mdi mdi-pencil font-size-18"></i></a> --}}
-                                        <form action="{{route('absensi.update', $absen->id)}}" method="POST" style="display: contents;">
-                                            @method('PUT')
+                                        <form action="{{route('absensi.destroy', $absen->id)}}" method="POST" style="display: contents;">
+                                            @method('DELETE')
                                             @csrf
                                             <button class="text-danger" style="background-color: transparent; border: 0;" data-toggle="tooltip" data-placement="top" title="" data-original-title="Delete"><i class="mdi mdi-trash-can font-size-18"></i></button>
                                         </form>

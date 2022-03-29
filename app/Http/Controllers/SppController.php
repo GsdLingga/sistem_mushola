@@ -82,7 +82,12 @@ class SppController extends Controller
      */
     public function edit($id)
     {
-        //
+        $spp = Spp::where('spp.id','=',$id)->first();
+        $siswa = Siswa::get();
+        return view('content.spp.spp_edit', compact(
+            'spp',
+            'siswa'
+        ));
     }
 
     /**
@@ -94,7 +99,17 @@ class SppController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        $spp = $request->validate([
+            'nama' => ['required'],
+            'tanggal' => ['required', 'date'],
+        ]);
+
+        $spp = Spp::find($id);
+        $spp->id_siswa  = $request->nama;
+        $spp->tgl       = $request->tanggal;
+        $spp->save();
+
+        return redirect()->route('spp.index')->with('success', 'SPP Edited Successfully');
     }
 
     /**
@@ -105,6 +120,9 @@ class SppController extends Controller
      */
     public function destroy($id)
     {
-        //
+        $spp = Spp::find($id);
+        $spp->delete();
+
+        return redirect()->route('spp.index')->with('success', 'SPP Deleted Successfully');
     }
 }

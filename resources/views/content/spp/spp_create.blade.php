@@ -54,7 +54,7 @@
                     <form class="custom-validation" action="{{ route('spp.store') }}" method="POST">
                         @csrf
                         <div class="form-group">
-                            <label class="control-label">Jenis Kelamin</label>
+                            <label class="control-label">Nama Siswa</label>
                             <select name="nama" id="nama" class="form-control select2" required>
                                 <option>Select</option>
                                 <optgroup label="Nama Siswa">
@@ -72,7 +72,7 @@
                         <div class="form-group mb-4">
                             <label class="control-label">Tanggal Lahir</label>
                             <div class="input-group">
-                                <input name="tanggal" id="tanggal" type="text" class="form-control" data-provide="datepicker" data-date-format="yyyy-mm-dd" data-date-autoclose="true">
+                                <input name="tanggal" id="tanggal" type="text" class="form-control" data-provide="datepicker" data-date-format="yyyy-mm-dd" data-date-autoclose="true" autocomplete="off">
                                 <div class="input-group-append">
                                     <span class="input-group-text"><i class="mdi mdi-calendar"></i></span>
                                 </div>

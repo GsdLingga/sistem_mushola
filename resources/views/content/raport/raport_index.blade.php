@@ -96,8 +96,8 @@
                                     <td>{{ $raports->nilai_pai }}</td>
                                     <td>
                                         <a href="{{route('raport.edit', $raports->id)}}" class="mr-3 text-primary" data-toggle="tooltip" data-placement="top" title="" data-original-title="Edit"><i class="mdi mdi-pencil font-size-18"></i></a>
-                                        <form action="{{route('raport.update', $raports->id)}}" method="POST" style="display: contents;">
-                                            @method('PUT')
+                                        <form action="{{route('raport.destroy', $raports->id)}}" method="POST" style="display: contents;">
+                                            @method('DELETE')
                                             @csrf
                                             <button class="text-danger" style="background-color: transparent; border: 0;" data-toggle="tooltip" data-placement="top" title="" data-original-title="Delete"><i class="mdi mdi-trash-can font-size-18"></i></button>
                                         </form>

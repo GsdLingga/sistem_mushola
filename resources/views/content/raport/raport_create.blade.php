@@ -54,7 +54,7 @@
                     <form class="custom-validation" action="{{ route('raport.store') }}" method="POST">
                         @csrf
                         <div class="form-group">
-                            <label class="control-label">Jenis Kelamin</label>
+                            <label class="control-label">Nama Siswa</label>
                             <select name="nama" id="nama" class="form-control select2" required>
                                 <option>Select</option>
                                 <optgroup label="Jenis Kelamin">

@@ -120,6 +120,9 @@ class AbsensiController extends Controller
      */
     public function destroy($id)
     {
-        //
+        $absensi = Absensi::find($id);
+        $absensi->delete();
+
+        return redirect()->route('absensi.index')->with('success', 'Absen Deleted Successfully');
     }
 }

@@ -1,5 +1,5 @@
 @extends('layouts.app2')
-@section('title', 'Edit Siswa')
+@section('title', 'Edit Nilai')
 @push('css')
     <link href="{{asset('assets/libs/select2/css/select2.min.css')}}" rel="stylesheet" type="text/css" />
     <link href="{{asset('assets/libs/bootstrap-datepicker/css/bootstrap-datepicker.min.css')}}" rel="stylesheet">
@@ -11,7 +11,7 @@
     <div class="row">
         <div class="col-12">
             <div class="page-title-box d-flex align-items-center justify-content-between">
-                <h4 class="mb-0">Siswa</h4>
+                <h4 class="mb-0">Nilai</h4>
 
                 <div class="page-title-right">
                     <ol class="breadcrumb m-0">
@@ -48,64 +48,66 @@
         <div class="col-xl-12">
             <div class="card">
                 <div class="card-body">
-                    <h4 class="card-title">Tambah Siswa</h4>
+                    <h4 class="card-title">Tambah Nilai</h4>
                     <p class="card-title-desc">
                     </p>
-                    <form class="custom-validation" action="{{ route('siswa.update', $siswa->id) }}" method="POST">
+                    <form class="custom-validation" action="{{ route('raport.update', $raport->id) }}" method="POST">
                         @method('PATCH')
                         @csrf
                         <div class="form-group">
-                            <label>Nama</label>
-                            <input name="name" id="name" type="text" class="form-control" required placeholder="Type something" value="{{ $siswa->nama }}"/>
-                            @error('name')
-                            <span class="invalid-feedback" role="alert">
-                                <strong>{{ $message }}</strong>
-                            </span>
-                        @enderror
-                        </div>
-                        <div class="form-group mb-4">
-                            <label class="control-label">Tanggal Lahir</label>
-                            <div class="input-group">
-                                <input name="tgl_lahir" id="tgl_lahir" type="text" value="{{ $siswa->tgl_lahir }}" class="form-control" data-provide="datepicker" data-date-format="yyyy-mm-dd" data-date-autoclose="true">
-                                <div class="input-group-append">
-                                    <span class="input-group-text"><i class="mdi mdi-calendar"></i></span>
-                                </div>
-                                @error('tgl_lahir')
-                                    <span class="invalid-feedback" role="alert">
-                                        <strong>{{ $message }}</strong>
-                                    </span>
-                                @enderror
-                            </div><!-- input-group -->
-                        </div>
-                        <div class="form-group">
-                            <label class="control-label">Jenis Kelamin</label>
-                            <select name="jenis_kelamin" id="jenis_kelamin" value="{{ $siswa->jenis_kelamin }}" class="form-control select2" required>
+                            <label class="control-label">Nama Siswa</label>
+                            <select name="nama" id="nama" class="form-control select2" required>
                                 <option>Select</option>
                                 <optgroup label="Jenis Kelamin">
-                                    <option <?php if($siswa->jenis_kelamin == "laki-laki") echo "selected=\"selected\""; ?> value="laki-laki">Laki-laki</option>
-                                    <option <?php if($siswa->jenis_kelamin == "perempuan") echo "selected=\"selected\""; ?> value="perempuan">Perempuan</option>
+                                    @foreach ($siswa as $siswas)
+                                        <option <?php if($raport->id_siswa == $siswas->id) echo "selected=\"selected\""; ?> value="{{ $siswas->id }}">{{ $siswas->nama }}</option>
+                                    @endforeach
                                 </optgroup>
                             </select>
-                            @error('jenis_kelamin')
+                            @error('nama')
                                 <span class="invalid-feedback" role="alert">
                                     <strong>{{ $message }}</strong>
                                 </span>
                             @enderror
                         </div>
                         <div class="form-group">
-                            <label>Alamat</label>
-                            <input name="alamat" id="alamat" type="text" value="{{ $siswa->alamat }}" class="form-control" required placeholder="Type something"/>
-                            @error('alamat')
-                            <span class="invalid-feedback" role="alert">
-                                <strong>{{ $message }}</strong>
-                            </span>
-                        @enderror
+                            <label>Nilai Bacaan</label>
+                            <div>
+                                <input name="nilai_bacaan" id="nilai_bacaan" value="{{ $raport->nilai_bacaan }}" data-parsley-type="number" type="text" class="form-control" required placeholder="Enter only numbers"/>
+                                @error('nilai_bacaan')
+                                    <span class="invalid-feedback" role="alert">
+                                        <strong>{{ $message }}</strong>
+                                    </span>
+                                @enderror
+                            </div>
                         </div>
                         <div class="form-group">
-                            <label>Nomor Telepon</label>
+                            <label>Nilai Hafalan</label>
                             <div>
-                                <input name="telepon" id="telepon" value="{{ $siswa->telepon }}" data-parsley-type="number" type="text" class="form-control" required placeholder="Enter only numbers"/>
-                                @error('telepon')
+                                <input name="nilai_hafalan" id="nilai_hafalan" value="{{ $raport->nilai_hafalan }}" data-parsley-type="number" type="text" class="form-control" required placeholder="Enter only numbers"/>
+                                @error('nilai_hafalan')
+                                    <span class="invalid-feedback" role="alert">
+                                        <strong>{{ $message }}</strong>
+                                    </span>
+                                @enderror
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label>Nilai Praktek</label>
+                            <div>
+                                <input name="nilai_praktek" id="nilai_praktek" value="{{ $raport->nilai_praktek }}" data-parsley-type="number" type="text" class="form-control" required placeholder="Enter only numbers"/>
+                                @error('nilai_praktek')
+                                    <span class="invalid-feedback" role="alert">
+                                        <strong>{{ $message }}</strong>
+                                    </span>
+                                @enderror
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label>Nilai PAI</label>
+                            <div>
+                                <input name="nilai_pai" id="nilai_pai" value="{{ $raport->nilai_pai }}" data-parsley-type="number" type="text" class="form-control" required placeholder="Enter only numbers"/>
+                                @error('nilai_pai')
                                     <span class="invalid-feedback" role="alert">
                                         <strong>{{ $message }}</strong>
                                     </span>

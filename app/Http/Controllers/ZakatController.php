@@ -77,7 +77,11 @@ class ZakatController extends Controller
      */
     public function edit($id)
     {
-        //
+        $zakat = Zakat::where('zakat.id','=',$id)->first();
+
+        return view('content.zakat.zakat_edit', compact(
+            'zakat'
+        ));
     }
 
     /**
@@ -89,7 +93,19 @@ class ZakatController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        $zakat = $request->validate([
+            'name' => ['required', 'string', 'max:255'],
+            'tgl' => ['required', 'date'],
+            'keterangan' => ['required', 'string', 'numeric'],
+        ]);
+
+        $zakat = Zakat::find($id);
+        $zakat->nama  = $request->name;
+        $zakat->tgl   = $request->tgl;
+        $zakat->ket   = $request->keterangan;
+        $zakat->save();
+
+        return redirect()->route('zakat.index')->with('success', 'Zakat Edit Successfully');
     }
 
     /**
@@ -100,6 +116,9 @@ class ZakatController extends Controller
      */
     public function destroy($id)
     {
-        //
+        $zakat = Zakat::find($id);
+        $zakat->delete();
+
+        return redirect()->route('zakat.index')->with('success', 'Zakat Deleted Successfully');
     }
 }

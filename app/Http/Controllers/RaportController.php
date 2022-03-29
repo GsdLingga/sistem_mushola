@@ -50,10 +50,10 @@ class RaportController extends Controller
     {
         $raport = $request->validate([
             'nama' => ['required'],
-            'nilai_bacaan' => ['required', 'string', 'numeric'],
-            'nilai_hafalan' => ['required', 'string', 'numeric'],
-            'nilai_praktek' => ['required', 'string', 'numeric'],
-            'nilai_pai' => ['required', 'string', 'numeric'],
+            'nilai_bacaan' => ['required', 'numeric', 'between:0,100'],
+            'nilai_hafalan' => ['required', 'numeric', 'between:0,100'],
+            'nilai_praktek' => ['required', 'numeric', 'between:0,100'],
+            'nilai_pai' => ['required', 'numeric', 'between:0,100'],
         ]);
 
         
@@ -67,7 +67,7 @@ class RaportController extends Controller
 
         return redirect()->route('raport.index')->with('success', 'Raport Created Successfully');
         
-        return $request->all();
+        // return $request->all();
     }
 
     /**
@@ -89,7 +89,12 @@ class RaportController extends Controller
      */
     public function edit($id)
     {
-        //
+        $raport = Raport::where('id','=',$id)->first();
+        $siswa = Siswa::get();
+        return view('content.raport.raport_edit', compact(
+            'raport',
+            'siswa'
+        ));
     }
 
     /**
@@ -101,7 +106,33 @@ class RaportController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        $raport = $request->validate([
+            'nama' => ['required'],
+            'nilai_bacaan' => ['required', 'numeric', 'between:0,100'],
+            'nilai_hafalan' => ['required', 'numeric', 'between:0,100'],
+            'nilai_praktek' => ['required', 'numeric', 'between:0,100'],
+            'nilai_pai' => ['required', 'numeric', 'between:0,100'],
+        ]);
+
+        
+        $raport  = Raport::create([
+            'id_siswa'          => $request->nama,
+            'nilai_bacaan'  => $request->nilai_bacaan,
+            'nilai_hafalan' => $request->nilai_hafalan,
+            'nilai_praktek' => $request->nilai_praktek,
+            'nilai_pai'     => $request->nilai_pai,
+        ]);
+
+        $raport = Raport::find($id);
+        $raport->id_siswa        = $request->name;
+        $raport->nilai_bacaan    = $request->nilai_bacaan;
+        $raport->nilai_hafalan   = $request->nilai_hafalan;
+        $raport->nilai_praktek   = $request->nilai_praktek;
+        $raport->nilai_pai       = $request->nilai_pai;
+        $raport->save();
+
+        return redirect()->route('raport.index')->with('success', 'Raport Edited Successfully');
+        
     }
 
     /**
@@ -112,6 +143,9 @@ class RaportController extends Controller
      */
     public function destroy($id)
     {
-        //
+        $raport = Raport::find($id);
+        $raport->delete();
+
+        return redirect()->route('raport.index')->with('success', 'Nilai Deleted Successfully');
     }
 }

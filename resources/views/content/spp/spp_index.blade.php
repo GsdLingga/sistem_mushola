@@ -90,8 +90,8 @@
                                     <td>{{ Carbon\Carbon::parse($spps->tgl)->translatedFormat('d F Y') }}</td>
                                     <td>
                                         <a href="{{route('spp.edit', $spps->id)}}" class="mr-3 text-primary" data-toggle="tooltip" data-placement="top" title="" data-original-title="Edit"><i class="mdi mdi-pencil font-size-18"></i></a>
-                                        <form action="{{route('spp.update', $spps->id)}}" method="POST" style="display: contents;">
-                                            @method('PUT')
+                                        <form action="{{route('spp.destroy', $spps->id)}}" method="POST" style="display: contents;">
+                                            @method('DELETE')
                                             @csrf
                                             <button class="text-danger" style="background-color: transparent; border: 0;" data-toggle="tooltip" data-placement="top" title="" data-original-title="Delete"><i class="mdi mdi-trash-can font-size-18"></i></button>
                                         </form>
