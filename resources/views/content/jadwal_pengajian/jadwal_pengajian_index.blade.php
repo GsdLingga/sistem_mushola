@@ -1,7 +1,6 @@
 @extends('layouts.app2')
 @section('title', 'Jadwal Pengajian')
 @push('css')
-
     <!-- Plugin css -->
     {{-- <link href="{{asset('assets/libs/fullcalendar/fullcalendar.min.css')}}" rel="stylesheet" type="text/css" /> --}}
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/fullcalendar/3.9.0/fullcalendar.css" />
@@ -150,6 +149,8 @@
     <script src="{{asset('assets/libs/moment/min/moment.min.js')}}"></script>
     <script src="{{asset('assets/libs/jquery-ui-dist/jquery-ui.min.js')}}"></script>
     <script src="{{asset('assets/libs/fullcalendar/fullcalendar.min.js')}}"></script>
+
+    <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     
     <!-- Calendar init -->
     {{-- <script src="{{asset('assets/js/pages/calendar.init.js')}}"></script> --}}
@@ -184,7 +185,8 @@
                 right:"month,basicWeek,basicDay"
             },
             timeFormat: 'H:mm',
-            editable:true,
+            // editable:true,
+            // disableDragging:true,
             //add event
             events: jadwal,
             color: 'yellow',   // an option!
@@ -276,8 +278,56 @@
             //     });
             // },
             eventClick: function (event) {
-                var deleteMsg = confirm("Do you really want to delete?");
-                if (deleteMsg) {
+                Swal.fire({
+                    title: 'Select Action',
+                    showDenyButton: true,
+                    showCancelButton: true,
+                    confirmButtonText: 'Edit',
+                    denyButtonText: `Delete`,
+                }).then((result) => {
+                    /* Read more about isConfirmed, isDenied below */
+                    if (result.isConfirmed) {
+                        // Swal.fire('Saved!', '', 'success')
+                        window.location.href = "jadwal-pengajian/" + event.id + "/edit";
+                    } else if (result.isDenied) {
+                        // Swal.fire('Changes are not saved', '', 'info')
+                        Swal.fire({
+                            title: 'Are you sure?',
+                            text: "You won't be able to revert this!",
+                            icon: 'warning',
+                            showCancelButton: true,
+                            confirmButtonColor: '#3085d6',
+                            cancelButtonColor: '#d33',
+                            confirmButtonText: 'Yes, delete it!'
+                        }).then((result) => {
+                            if (result.isConfirmed) {
+                                let token = $('meta[name="csrf-token"]').attr('content');
+                                $.ajax({
+                                    type: "DELETE",
+                                    url: 'jadwal-pengajian/' + event.id,
+                                    // dataType: 'json',
+                                    // cache: false,
+                                    // traditional: true, 
+                                    data: {
+                                        _token: token,
+                                        id: event.id,
+                                    },
+                                    success: function (response) {
+                                        calendar.fullCalendar('removeEvents', event.id);
+                                        Swal.fire(
+                                            'Deleted!',
+                                            'Your file has been deleted.',
+                                            'success'
+                                        )
+                                    }
+                                });
+                            }
+                        })
+                    }
+                })
+                // console.log(event.id);
+                // var deleteMsg = confirm("Do you really want to delete?");
+                // if (deleteMsg) {
                     // $.ajax({
                     //     type: "POST",
                     //     url: SITEURL + '/fullcalenderAjax',
@@ -290,7 +340,7 @@
                     //         displayMessage("Event Deleted Successfully");
                     //     }
                     // });
-                }
+                // }
             }
 
         });

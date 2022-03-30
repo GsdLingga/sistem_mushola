@@ -49,14 +49,14 @@ class JadwalPengajianController extends Controller
     public function store(Request $request)
     {
         $jadwal = $request->validate([
-            'waktu' => ['required', 'date_format:H:i'],
+            'judul'   => ['required'],
             'tanggal' => ['required', 'date'],
         ]);
 
         
         $jadwal  = JadwalPengajian::create([
-            'waktu'       => $request->waktu,
-            'tanggal'     => $request->tanggal,
+            'title'     => $request->judul,
+            'start'     => $request->tanggal,
         ]);
 
         return redirect()->route('jadwal-pengajian.index')->with('success', 'Jadwal Pengajian Created Successfully');
@@ -82,7 +82,10 @@ class JadwalPengajianController extends Controller
      */
     public function edit($id)
     {
-        //
+        $jadwal_pengajian = JadwalPengajian::where('id','=',$id)->first();
+        return view('content.jadwal_pengajian.jadwal_pengajian_edit', compact(
+            'jadwal_pengajian'
+        ));
     }
 
     /**
@@ -94,7 +97,17 @@ class JadwalPengajianController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        $jadwal = $request->validate([
+            'judul'   => ['required'],
+            'tanggal' => ['required', 'date'],
+        ]);
+
+        $jadwal = JadwalPengajian::find($id);
+        $jadwal->title    = $request->judul;
+        $jadwal->start    = $request->tanggal;
+        $jadwal->save();
+
+        return redirect()->route('jadwal-pengajian.index')->with('success', 'Jadwal Pengajian Edited Successfully');
     }
 
     /**
@@ -105,6 +118,10 @@ class JadwalPengajianController extends Controller
      */
     public function destroy($id)
     {
-        //
+        $jadwal_pengajian = JadwalPengajian::find($id);
+        $jadwal_pengajian->delete();
+        return response()->json([
+            'success' => 'Record has been deleted successfully!'
+        ]);
     }
 }

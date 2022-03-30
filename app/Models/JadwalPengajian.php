@@ -12,7 +12,7 @@ class JadwalPengajian extends Model
     protected $table = 'jadwal_pengajian';
     protected $primaryKey = 'id';
     protected $fillable = [
-        'waktu',
-        'tanggal',
+        'title',
+        'start',
     ];
 }

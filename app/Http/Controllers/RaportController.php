@@ -114,15 +114,6 @@ class RaportController extends Controller
             'nilai_pai' => ['required', 'numeric', 'between:0,100'],
         ]);
 
-        
-        $raport  = Raport::create([
-            'id_siswa'          => $request->nama,
-            'nilai_bacaan'  => $request->nilai_bacaan,
-            'nilai_hafalan' => $request->nilai_hafalan,
-            'nilai_praktek' => $request->nilai_praktek,
-            'nilai_pai'     => $request->nilai_pai,
-        ]);
-
         $raport = Raport::find($id);
         $raport->id_siswa        = $request->name;
         $raport->nilai_bacaan    = $request->nilai_bacaan;

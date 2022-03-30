@@ -52,8 +52,7 @@ class SppController extends Controller
             'nama' => ['required'],
             'tanggal' => ['required', 'date'],
         ]);
-
-        
+  
         $spp  = Spp::create([
             'id_siswa'      => $request->nama,
             'tgl'           => $request->tanggal,
