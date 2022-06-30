@@ -61,72 +61,6 @@
             </div>
         </div>
     </div>
-
-    {{-- <div class="row">
-        <div class="col-12">
-            <div class="card">
-                <div class="card-body">
-                    <div class="float-right">
-                        <a href="#" class="dropdown-toggle arrow-none card-drop" data-toggle="dropdown" aria-expanded="false">
-                            <i class="mdi mdi-dots-vertical"></i>
-                        </a>
-                        <div class="dropdown-menu dropdown-menu-right">
-                            <!-- item-->
-                            <a href="javascript:void(0);" class="dropdown-item">Sales Report</a>
-                            <!-- item-->
-                            <a href="javascript:void(0);" class="dropdown-item">Export Report</a>
-                            <!-- item-->
-                            <a href="javascript:void(0);" class="dropdown-item">Profit</a>
-                            <!-- item-->
-                            <a href="javascript:void(0);" class="dropdown-item">Action</a>
-                        </div>
-                    </div>
-
-                    <h4 class="card-title mb-4">Daftar Siswa</h4>
-                    <p class="card-title-desc">
-                        This example shows the multi option. Note how a click on a row will toggle its selected state without effecting other rows,
-                        unlike the os and single options shown in other examples.
-                    </p>
-
-                    <table id="datatable" class="table table-bordered dt-responsive nowrap" style="border-collapse: collapse; border-spacing: 0; width: 100%;">
-                        <thead>
-                            <tr>
-                                <th>No</th>
-                                <th>Nama</th>
-                                <th>Tanggal Lahir</th>
-                                <th>Jenis Kelamin</th>
-                                <th>Alamat</th>
-                                <th>Telepon</th>
-                                <th>Action</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            @foreach ($siswa as $siswas)
-                                <tr>
-                                    <td>{{ $loop->iteration }}</td>
-                                    <td>{{ $siswas->nama }}</td>
-                                    <td>{{ Carbon\Carbon::parse($siswas->tgl_lahir)->translatedFormat('d F Y') }}</td>
-                                    <td>{{ Str::ucfirst($siswas->jenis_kelamin)  }}</td>
-                                    <td>{{ $siswas->alamat }}</td>
-                                    <td>{{ $siswas->telepon }}</td>
-                                    <td>
-                                        <a href="{{route('siswa.edit', $siswas->id)}}" class="mr-3 text-primary" data-toggle="tooltip" data-placement="top" title="" data-original-title="Edit"><i class="mdi mdi-pencil font-size-18"></i></a>
-                                        <form action="{{route('siswa.update', $siswas->id)}}" method="POST" style="display: contents;">
-                                            @method('PUT')
-                                            @csrf
-                                            <button class="text-danger" style="background-color: transparent; border: 0;" data-toggle="tooltip" data-placement="top" title="" data-original-title="Delete"><i class="mdi mdi-trash-can font-size-18"></i></button>
-                                        </form>
-                                    </td>
-                                </tr>
-                            @endforeach
-                        </tbody>
-                    </table>
-                
-                </div> <!-- end card body-->
-            </div> <!-- end card -->
-        </div><!-- end col-->
-    </div> --}}
-    <!-- end row-->
 @endsection
 @push('js')
     <!-- Buttons examples -->
@@ -157,13 +91,13 @@
     {{-- <script src="https://cdnjs.cloudflare.com/ajax/libs/fullcalendar/3.9.0/fullcalendar.js"></script> --}}
 
     <script>
-        $(document).ready(function () {
+    $(document).ready(function () {
            
         // var SITEURL = "{{ url('/') }}";
 
         //get jadwal_pengajian value from controller
         var jadwal= {!! json_encode($jadwal_pengajian) !!};
-        console.log(jadwal);
+        // console.log(jadwal);
           
         $.ajaxSetup({
             headers: {
@@ -172,111 +106,15 @@
         });
           
         var calendar = $('#calendar').fullCalendar({
-            // titleFormat: { // will produce something like "Tuesday, September 18, 2018"
-            //     month: 'long',
-            //     year: 'numeric',
-            //     day: 'numeric',
-            //     weekday: 'long',
-            // },
-            // hour12:true,
             header:{
                 left:"prev,next today",
                 center:"title",
                 right:"month,basicWeek,basicDay"
             },
             timeFormat: 'H:mm',
-            // editable:true,
-            // disableDragging:true,
-            //add event
             events: jadwal,
             color: 'yellow',   // an option!
             textColor: 'black', // an option!
-            // eventClick: function(event) {
-            
-            // },
-
-            // dropable:false,
-            // editable: true,
-            // selectable: true,
-            
-            // themeSystem: 'bootstrap5',
-            // default: 'standard',
-            // default:{
-            //     today:    'today',
-            //     month:    'month',
-            //     week:     'week',
-            //     day:      'day',
-            //     list:     'list',
-            //     start: 'title', // will normally be on the left. if RTL, will be on the right
-            //     center: '',
-            //     end: 'today prev,next', // will normally be on the right. if RTL, will be on the left
-            //     prev: 'chevron-left',
-            //     next: 'chevron-right',
-            //     prevYear: 'chevrons-left', // double chevron
-            //     nextYear: 'chevrons-right', // double chevron
-            // },
-            // editable: true,
-            // events: SITEURL + "/fullcalender",
-            // displayEventTime: false,
-            // eventRender: function (event, element, view) {
-            //     if (event.allDay === 'true') {
-            //             event.allDay = true;
-            //     } else {
-            //             event.allDay = false;
-            //     }
-            // },
-            // selectable: true,
-            // selectHelper: true,
-            // select: function (start, end, allDay) {
-            //     var title = prompt('Event Title:');
-            //     if (title) {
-            //         var start = $.fullCalendar.formatDate(start, "Y-MM-DD");
-            //         var end = $.fullCalendar.formatDate(end, "Y-MM-DD");
-            //         $.ajax({
-            //             url: SITEURL + "/fullcalenderAjax",
-            //             data: {
-            //                 title: title,
-            //                 start: start,
-            //                 end: end,
-            //                 type: 'add'
-            //             },
-            //             type: "POST",
-            //             success: function (data) {
-            //                 displayMessage("Event Created Successfully");
-
-            //                 calendar.fullCalendar('renderEvent',
-            //                     {
-            //                         id: data.id,
-            //                         title: title,
-            //                         start: start,
-            //                         end: end,
-            //                         allDay: allDay
-            //                     },true);
-
-            //                 calendar.fullCalendar('unselect');
-            //             }
-            //         });
-            //     }
-            // },
-            // eventDrop: function (event, delta) {
-            //     var start = $.fullCalendar.formatDate(event.start, "Y-MM-DD");
-            //     var end = $.fullCalendar.formatDate(event.end, "Y-MM-DD");
-
-            //     $.ajax({
-            //         url: SITEURL + '/fullcalenderAjax',
-            //         data: {
-            //             title: event.title,
-            //             start: start,
-            //             end: end,
-            //             id: event.id,
-            //             type: 'update'
-            //         },
-            //         type: "POST",
-            //         success: function (response) {
-            //             displayMessage("Event Updated Successfully");
-            //         }
-            //     });
-            // },
             eventClick: function (event) {
                 Swal.fire({
                     title: 'Select Action',
@@ -287,10 +125,8 @@
                 }).then((result) => {
                     /* Read more about isConfirmed, isDenied below */
                     if (result.isConfirmed) {
-                        // Swal.fire('Saved!', '', 'success')
                         window.location.href = "jadwal-pengajian/" + event.id + "/edit";
                     } else if (result.isDenied) {
-                        // Swal.fire('Changes are not saved', '', 'info')
                         Swal.fire({
                             title: 'Are you sure?',
                             text: "You won't be able to revert this!",
@@ -305,9 +141,6 @@
                                 $.ajax({
                                     type: "DELETE",
                                     url: 'jadwal-pengajian/' + event.id,
-                                    // dataType: 'json',
-                                    // cache: false,
-                                    // traditional: true, 
                                     data: {
                                         _token: token,
                                         id: event.id,
@@ -325,22 +158,6 @@
                         })
                     }
                 })
-                // console.log(event.id);
-                // var deleteMsg = confirm("Do you really want to delete?");
-                // if (deleteMsg) {
-                    // $.ajax({
-                    //     type: "POST",
-                    //     url: SITEURL + '/fullcalenderAjax',
-                    //     data: {
-                    //             id: event.id,
-                    //             type: 'delete'
-                    //     },
-                    //     success: function (response) {
-                    //         calendar.fullCalendar('removeEvents', event.id);
-                    //         displayMessage("Event Deleted Successfully");
-                    //     }
-                    // });
-                // }
             }
 
         });

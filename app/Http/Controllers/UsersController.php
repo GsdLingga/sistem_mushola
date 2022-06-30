@@ -99,7 +99,12 @@ class UsersController extends Controller
      */
     public function edit($id)
     {
-        //
+        $user = User::find($id);
+
+        // return $user;
+        return view('content.user.user_edit', compact(
+            'user'
+        ));
     }
 
     /**
@@ -111,7 +116,77 @@ class UsersController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        $user = $request->validate([
+            'name' => ['required', 'string', 'max:255'],
+            'email' => ['required', 'string', 'email', 'max:255'],
+            'telepon' => ['required', 'string', 'numeric', 'digits_between:10,13'],
+            'password' => ['nullable', 'string', 'min:7', 'confirmed'],
+            'role' => ['required'],
+        ]);
+
+        $emailRequest = $request->email;
+        $allEmail = User::select('id','email')->get();
+        $selfEmail = User::where('id',$id)->first();
+
+        $count = 0;
+
+        foreach($allEmail as $all){
+            if ($emailRequest == $all->email) {
+                $count = +1;
+            }
+        }
+
+        if ($selfEmail->email == $emailRequest){
+            
+            if (isset($request->password)) {
+                $user  = User::find($id);
+                $user->name     = $request->name;
+                $user->email    = $request->email;
+                $user->telepon  = $request->telepon;
+                $user->password = Hash::make($request->password);
+                $user->role     = $request->role;
+                $user->slug     = Str::slug($request->name);
+                $user->save();
+
+                return redirect()->route('user.index')->with('success', 'User Created Successfully');
+            } else {
+                $user  = User::find($id);
+                $user->name     = $request->name;
+                $user->email    = $request->email;
+                $user->telepon  = $request->telepon;
+                $user->role     = $request->role;
+                $user->slug     = Str::slug($request->name);
+                $user->save();
+
+                return redirect()->route('user.index')->with('success', 'User Created Successfully');
+            }
+        }elseif($count == 1) {
+            return redirect()->back()->with('emailtaken','Email is already taken');
+        }else {
+            
+            if (isset($request->password)) {
+                $user  = User::find($id);
+                $user->name     = $request->name;
+                $user->email    = $request->email;
+                $user->telepon  = $request->telepon;
+                $user->password = Hash::make($request->password);
+                $user->role     = $request->role;
+                $user->slug     = Str::slug($request->name);
+                $user->save();
+
+                return redirect()->route('user.index')->with('success', 'User Created Successfully');
+            } else {
+                $user  = User::find($id);
+                $user->name     = $request->name;
+                $user->email    = $request->email;
+                $user->telepon  = $request->telepon;
+                $user->role     = $request->role;
+                $user->slug     = Str::slug($request->name);
+                $user->save();
+
+                return redirect()->route('user.index')->with('success', 'User Created Successfully');
+            }
+        }
     }
 
     /**

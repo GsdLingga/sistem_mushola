@@ -15,17 +15,9 @@
                 <a href="{{route('absensi.create')}}" type="button" class="btn btn-primary waves-effect waves-light" style="color: white;">
                     <i class="mdi mdi-account-plus align-middle mr-2"></i> Tambah Absensi
                 </a>
-
-                {{-- <div class="page-title-right">
-                    <ol class="breadcrumb m-0">
-                        <li class="breadcrumb-item"><a href="javascript: void(0);">Nazox</a></li>
-                        <li class="breadcrumb-item active">Dashboard</li>
-                    </ol>
-                </div> --}}
-
             </div>
             @if ($errors->any())
-                <div class="alert alert-dange alert-dismissible fade showr" role="alert">
+                <div class="alert alert-danger alert-dismissible fade show" role="alert">
                     @foreach ($errors->all() as $error)
                     <i class="mdi mdi-block-helper mr-2"></i>
                     {{ $error }}

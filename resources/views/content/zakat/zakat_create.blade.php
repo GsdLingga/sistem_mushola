@@ -24,7 +24,7 @@
         </div>
     </div>
     @if ($errors->any())
-        <div class="alert alert-dange alert-dismissible fade showr" role="alert">
+        <div class="alert alert-danger alert-dismissible fade show" role="alert">
             @foreach ($errors->all() as $error)
             <i class="mdi mdi-block-helper mr-2"></i>
             {{ $error }}
