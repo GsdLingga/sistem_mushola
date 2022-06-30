@@ -46,6 +46,7 @@ class SiswaController extends Controller
         $siswa = $request->validate([
             'name' => ['required', 'string', 'max:255'],
             'tgl_lahir' => ['required', 'date'],
+            'kelas' => ['required', 'string'],
             'jenis_kelamin' => ['required', 'string'],
             'alamat' => ['required', 'string', 'max:255'],
             'telepon' => ['required', 'string', 'numeric', 'digits_between:10,13'],
@@ -53,19 +54,18 @@ class SiswaController extends Controller
 
         
         $siswa  = Siswa::create([
-            'nama'      => $request->name,
+            'nama'          => $request->name,
             'tgl_lahir'     => $request->tgl_lahir,
-            'jenis_kelamin'  => $request->jenis_kelamin,
-            'alamat'      => $request->alamat,
-            'telepon'   => $request->telepon,
-            'status'   => 1,
+            'kelas'         => $request->kelas,
+            'jenis_kelamin' => $request->jenis_kelamin,
+            'alamat'        => $request->alamat,
+            'telepon'       => $request->telepon,
+            'status'        => 1,
             // 'slug'      => Str::slug($request->name),
         ]);
 
         return redirect()->route('siswa.index')->with('success', 'Siswa Created Successfully');
         
-
-        // return $siswa;
     }
 
     /**
@@ -114,6 +114,7 @@ class SiswaController extends Controller
         $siswa = Siswa::find($id);
         $siswa->nama            = $request->name;
         $siswa->tgl_lahir       = $request->tgl_lahir;
+        $siswa->kelas           = $request->kelas;
         $siswa->jenis_kelamin   = $request->jenis_kelamin;
         $siswa->alamat          = $request->alamat;
         $siswa->telepon         = $request->telepon;

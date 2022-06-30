@@ -52,33 +52,14 @@
             <div class="card">
                 <div class="card-body">
                     <div class="float-right">
-                        {{-- <a href="#" class="dropdown-toggle arrow-none card-drop" data-toggle="dropdown" aria-expanded="false">
-                            <i class="mdi mdi-dots-vertical"></i>
-                        </a>
-                        <div class="dropdown-menu dropdown-menu-right">
-                            <!-- item-->
-                            <a href="javascript:void(0);" class="dropdown-item">Sales Report</a>
-                            <!-- item-->
-                            <a href="javascript:void(0);" class="dropdown-item">Export Report</a>
-                            <!-- item-->
-                            <a href="javascript:void(0);" class="dropdown-item">Profit</a>
-                            <!-- item-->
-                            <a href="javascript:void(0);" class="dropdown-item">Action</a>
-                        </div> --}}
                     </div>
-
                     <h4 class="card-title mb-4">Daftar Siswa</h4>
-                    {{-- <p class="card-title-desc">
-                        This example shows the multi option. Note how a click on a row will toggle its selected state without effecting other rows,
-                        unlike the os and single options shown in other examples.
-                    </p> --}}
-
                     <table id="datatable" class="table table-bordered dt-responsive nowrap" style="border-collapse: collapse; border-spacing: 0; width: 100%;">
                         <thead>
                             <tr>
                                 <th>No</th>
                                 <th>Nama</th>
-                                <th>Tanggal Lahir</th>
+                                <th>Kelas</th>
                                 <th>Jenis Kelamin</th>
                                 <th>Alamat</th>
                                 <th>Telepon</th>
@@ -90,7 +71,7 @@
                                 <tr>
                                     <td>{{ $loop->iteration }}</td>
                                     <td>{{ $siswas->nama }}</td>
-                                    <td>{{ Carbon\Carbon::parse($siswas->tgl_lahir)->translatedFormat('d F Y') }}</td>
+                                    <td>{{ Str::ucfirst($siswas->kelas) }}</td>
                                     <td>{{ Str::ucfirst($siswas->jenis_kelamin)  }}</td>
                                     <td>{{ $siswas->alamat }}</td>
                                     <td>{{ $siswas->telepon }}</td>

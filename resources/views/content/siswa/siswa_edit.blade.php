@@ -62,7 +62,6 @@
                                 <strong>{{ $message }}</strong>
                             </span>
                         @enderror
-                        </div>
                         <div class="form-group mb-4">
                             <label class="control-label">Tanggal Lahir</label>
                             <div class="input-group">
@@ -77,6 +76,24 @@
                                 @enderror
                             </div><!-- input-group -->
                         </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="control-label">Kelas</label>
+                        <select name="kelas" id="kelas" value="{{ $siswa->kelas }}" class="form-control select2" required>
+                            <option>Select</option>
+                            <optgroup label="Jenis Kelas">
+                                <option <?php if($siswa->kelas == "a") echo "selected=\"selected\""; ?> value="a">A</option>
+                                <option <?php if($siswa->kelas == "b") echo "selected=\"selected\""; ?> value="b">B</option>
+                                <option <?php if($siswa->kelas == "c") echo "selected=\"selected\""; ?> value="c">C</option>
+                                <option <?php if($siswa->kelas == "d") echo "selected=\"selected\""; ?> value="d">D</option>
+                            </optgroup>
+                        </select>
+                        @error('kelas')
+                            <span class="invalid-feedback" role="alert">
+                                <strong>{{ $message }}</strong>
+                            </span>
+                        @enderror
+                    </div>
                         <div class="form-group">
                             <label class="control-label">Jenis Kelamin</label>
                             <select name="jenis_kelamin" id="jenis_kelamin" value="{{ $siswa->jenis_kelamin }}" class="form-control select2" required>

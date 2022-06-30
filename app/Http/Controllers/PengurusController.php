@@ -15,9 +15,17 @@ class PengurusController extends Controller
     public function index()
     {
         $siswa = Siswa::all()->count();
+        $kelasA = Siswa::where('kelas', 'a')->count();
+        $kelasB = Siswa::where('kelas', 'b')->count();
+        $kelasC = Siswa::where('kelas', 'c')->count();
+        $kelasD = Siswa::where('kelas', 'd')->count();
 
         return view('content.home', compact(
-            'siswa'
+            'siswa',
+            'kelasA',
+            'kelasB',
+            'kelasC',
+            'kelasD'
         ));
     }
 
