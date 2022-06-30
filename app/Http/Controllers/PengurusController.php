@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\Models\Siswa;
 
 class PengurusController extends Controller
 {
@@ -13,7 +14,11 @@ class PengurusController extends Controller
      */
     public function index()
     {
-        return view('content.home');
+        $siswa = Siswa::all()->count();
+
+        return view('content.home', compact(
+            'siswa'
+        ));
     }
 
     /**

@@ -11,18 +11,6 @@
         <div class="col-12">
             <div class="page-title-box d-flex align-items-center justify-content-between">
                 <h4 class="mb-0">Absensi</h4>
-
-                {{-- <a href="{{route('absensi.create')}}" type="button" class="btn btn-primary waves-effect waves-light" style="color: white;">
-                    <i class="mdi mdi-account-plus align-middle mr-2"></i> Tambah Absensi
-                </a> --}}
-
-                {{-- <div class="page-title-right">
-                    <ol class="breadcrumb m-0">
-                        <li class="breadcrumb-item"><a href="javascript: void(0);">Nazox</a></li>
-                        <li class="breadcrumb-item active">Dashboard</li>
-                    </ol>
-                </div> --}}
-
             </div>
             @if ($errors->any())
                 <div class="alert alert-dange alert-dismissible fade showr" role="alert">
@@ -52,50 +40,45 @@
             <div class="card">
                 <div class="card-body">
                     <div class="float-right">
-                        {{-- <a href="#" class="dropdown-toggle arrow-none card-drop" data-toggle="dropdown" aria-expanded="false">
-                            <i class="mdi mdi-dots-vertical"></i>
-                        </a>
-                        <div class="dropdown-menu dropdown-menu-right">
-                            <!-- item-->
-                            <a href="javascript:void(0);" class="dropdown-item">Sales Report</a>
-                            <!-- item-->
-                            <a href="javascript:void(0);" class="dropdown-item">Export Report</a>
-                            <!-- item-->
-                            <a href="javascript:void(0);" class="dropdown-item">Profit</a>
-                            <!-- item-->
-                            <a href="javascript:void(0);" class="dropdown-item">Action</a>
-                        </div> --}}
                     </div>
-
                     <h4 class="card-title mb-4">Absensi</h4>
-                    {{-- <p class="card-title-desc">
-                        This example shows the multi option. Note how a click on a row will toggle its selected state without effecting other rows,
-                        unlike the os and single options shown in other examples.
-                    </p> --}}
                     <form class="custom-validation" action="{{ route('absensi.store') }}" method="POST">
                         @csrf
                         <table id="datatable" class="table table-bordered dt-responsive nowrap" style="border-collapse: collapse; border-spacing: 0; width: 100%;">
                             <thead>
                                 <tr>
-                                    <th style="width: 20px;">
-                                        <div class="custom-control custom-checkbox">
-                                            <input type="checkbox" class="custom-control-input" id="ordercheck">
-                                            <label class="custom-control-label" for="ordercheck">&nbsp;</label>
-                                        </div>
-                                    </th>
+                                    <th style="width: 5%">No</th>
                                     <th>Nama</th>
+                                    <th>Status Kehadiran</th>
                                 </tr>
                             </thead>
                             <tbody>
                                 @foreach ($absensi as $absen)
                                     <tr>
+                                        <td>{{$loop->iteration}}</td>
+                                        <td>{{ $absen->nama }}</td>
                                         <td>
-                                            <div class="custom-control custom-checkbox">
+                                            {{-- <div class="custom-control custom-checkbox">
                                                 <input type="checkbox" class="custom-control-input" id="ordercheck{{ $loop->iteration }}"  name="id_absen[]" value="{{ $absen->id }}">
                                                 <label class="custom-control-label" for="ordercheck{{ $loop->iteration }}">&nbsp;</label>
-                                            </div>
+                                            </div> --}}
+                                            <div class="custom-control custom-radio">
+                                                <div class="row">
+                                                    <div class="custom-control custom-radio mr-3">
+                                                        <input type="radio" id="hadir{{$loop->iteration}}" name="radio[absen{{$loop->iteration}}]" value="hadir-{{ $absen->id }}" class="custom-control-input" checked>
+                                                        <label class="custom-control-label" for="hadir{{$loop->iteration}}">Hadir</label>
+                                                    </div>
+                                                    <div class="custom-control custom-radio mr-3">
+                                                        <input type="radio" id="izin{{$loop->iteration}}" name="radio[absen{{$loop->iteration}}]" value="izin-{{ $absen->id }}" class="custom-control-input">
+                                                        <label class="custom-control-label" for="izin{{$loop->iteration}}">Izin</label>
+                                                    </div>
+                                                    <div class="custom-control custom-radio mr-3">
+                                                        <input type="radio" id="alpa{{$loop->iteration}}" name="radio[absen{{$loop->iteration}}]" value="alpa-{{ $absen->id }}" class="custom-control-input">
+                                                        <label class="custom-control-label" for="alpa{{$loop->iteration}}">Alpa</label>
+                                                    </div>
+                                                </div>
+                                            </div>   
                                         </td>
-                                        <td>{{ $absen->nama }}</td>
                                     </tr>
                                 @endforeach
                             </tbody>

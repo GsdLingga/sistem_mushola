@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Carbon\Carbon;
 use App\Models\Absensi;
+use Illuminate\Support\Facades\Log;
 
 class AbsensiController extends Controller
 {
@@ -41,6 +42,7 @@ class AbsensiController extends Controller
         $datenow = $getdate->toDateString();
         $absensi = DB::table('siswa')
                 ->select('siswa.id','siswa.nama')
+                ->where('siswa.status', '1')
                 ->whereNotIn('siswa.id', 
                     DB::table('absensi')
                     ->select('absensi.id_siswa')
@@ -62,20 +64,29 @@ class AbsensiController extends Controller
      */
     public function store(Request $request)
     {
-        $get_id = $request->input('id_absen');
+        $get_absen = $request->radio;
         $getdate = Carbon::now();
+        $arrayId = [];
+        $arrayAbsen = [];
         $datenow = $getdate->toDateString();
+        for ($i=1; $i <= count($get_absen) ; $i++) { 
+            $save = $get_absen['absen'.$i];
+            $simpan = explode("-", $save);
+            $arrayAbsen[] = $simpan[0];
+            $arrayId[] = $simpan[1];
+        }
 
-        foreach ($get_id as $id) {
+        for ($i=0; $i < count($arrayId) ; $i++) { 
+            // Log::info($arrayId[$i]);
             $absensi  = Absensi::create([
-                'id_siswa'      => $id,
-                'status'        => 'hadir',
+                'id_siswa'      => $arrayId[$i],
+                'status'        => $arrayAbsen[$i],
                 'tgl'           => $datenow,
             ]);  
         }
         return redirect()->route('absensi.index')->with('success', 'Absensi Created Successfully');
+        // return count($arrayId);
         
-        // return $datenow;
     }
 
     /**

@@ -58,7 +58,7 @@
                             <label class="control-label">Nama Siswa</label>
                             <select name="nama" id="nama" class="form-control select2" required>
                                 <option>Select</option>
-                                <optgroup label="Jenis Kelamin">
+                                <optgroup label="Nama Siswa">
                                     @foreach ($siswa as $siswas)
                                         <option <?php if($raport->id_siswa == $siswas->id) echo "selected=\"selected\""; ?> value="{{ $siswas->id }}">{{ $siswas->nama }}</option>
                                     @endforeach
