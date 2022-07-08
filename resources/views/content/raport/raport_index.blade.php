@@ -52,19 +52,9 @@
             <div class="card">
                 <div class="card-body">
                     <div class="float-right">
-                        {{-- <a href="#" class="dropdown-toggle arrow-none card-drop" data-toggle="dropdown" aria-expanded="false">
-                            <i class="mdi mdi-dots-vertical"></i>
+                        <a href="{{route('raport.pdf')}}" type="button" class="btn btn-primary waves-effect waves-light btn-sm" style="color: white;">
+                            <i class="mdi mdi-account-plus align-middle mr-2"></i> Cetak Raport
                         </a>
-                        <div class="dropdown-menu dropdown-menu-right">
-                            <!-- item-->
-                            <a href="javascript:void(0);" class="dropdown-item">Sales Report</a>
-                            <!-- item-->
-                            <a href="javascript:void(0);" class="dropdown-item">Export Report</a>
-                            <!-- item-->
-                            <a href="javascript:void(0);" class="dropdown-item">Profit</a>
-                            <!-- item-->
-                            <a href="javascript:void(0);" class="dropdown-item">Action</a>
-                        </div> --}}
                     </div>
 
                     <h4 class="card-title mb-4">Daftar Nilai Siswa</h4>
@@ -106,7 +96,7 @@
                             @endforeach
                         </tbody>
                     </table>
-                
+
                 </div> <!-- end card body-->
             </div> <!-- end card -->
         </div><!-- end col-->
@@ -123,7 +113,7 @@
     <script src="{{asset('assets/libs/datatables.net-buttons/js/buttons.html5.min.js')}}"></script>
     <script src="{{asset('assets/libs/datatables.net-buttons/js/buttons.print.min.js')}}"></script>
     <script src="{{asset('assets/libs/datatables.net-buttons/js/buttons.colVis.min.js')}}"></script>
-    
+
     <script src="{{asset('assets/libs/datatables.net-keytable/js/dataTables.keyTable.min.js')}}"></script>
     <script src="{{asset('assets/libs/datatables.net-select/js/dataTables.select.min.js')}}"></script>
 

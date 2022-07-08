@@ -54,4 +54,6 @@ Route::middleware('is_adminguru')->group(function () {
     Route::resource('siswa', SiswaController::class);
     Route::resource('absensi', AbsensiController::class);
     Route::resource('raport', RaportController::class);
+    Route::get('create-pdf-file', [RaportController::class, 'createPDF'])->name('raport.pdf');
+
 });

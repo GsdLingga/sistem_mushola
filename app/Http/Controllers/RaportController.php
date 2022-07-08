@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Models\Raport;
 use App\Models\Siswa;
 use Illuminate\Support\Facades\DB;
+use PDF;
 
 class RaportController extends Controller
 {
@@ -56,7 +57,7 @@ class RaportController extends Controller
             'nilai_pai' => ['required', 'numeric', 'between:0,100'],
         ]);
 
-        
+
         $raport  = Raport::create([
             'id_siswa'          => $request->nama,
             'nilai_bacaan'  => $request->nilai_bacaan,
@@ -66,7 +67,7 @@ class RaportController extends Controller
         ]);
 
         return redirect()->route('raport.index')->with('success', 'Raport Created Successfully');
-        
+
         // return $request->all();
     }
 
@@ -123,7 +124,7 @@ class RaportController extends Controller
         $raport->save();
 
         return redirect()->route('raport.index')->with('success', 'Raport Edited Successfully');
-        
+
     }
 
     /**
@@ -138,5 +139,22 @@ class RaportController extends Controller
         $raport->delete();
 
         return redirect()->route('raport.index')->with('success', 'Nilai Deleted Successfully');
+    }
+
+    public function createPDF()
+    {
+        // $data = [
+        //     'title' => 'Welcome to Tutsmake.com',
+        //     'date' => date('m/d/Y')
+        // ];
+
+        // $pdf = PDF::loadView('content.raport.raport_pdf', $data);
+
+        $pdf = PDF::loadView('content.raport.raport_pdf', [
+
+        ]);
+
+        return $pdf->download('raport.pdf');
+        // return view('content.raport.raport_pdf');
     }
 }
