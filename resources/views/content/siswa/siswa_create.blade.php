@@ -62,6 +62,17 @@
                             </span>
                         @enderror
                         </div>
+                        <div class="form-group">
+                            <label>Nomor Induk</label>
+                            <div>
+                                <input name="no_induk" id="no_induk" data-parsley-type="number" type="text" class="form-control" required placeholder="Enter only numbers"/>
+                                @error('no_induk')
+                                    <span class="invalid-feedback" role="alert">
+                                        <strong>{{ $message }}</strong>
+                                    </span>
+                                @enderror
+                            </div>
+                        </div>
                         <div class="form-group mb-4">
                             <label class="control-label">Tanggal Lahir</label>
                             <div class="input-group">
@@ -76,7 +87,7 @@
                                 @enderror
                             </div><!-- input-group -->
                         </div>
-                        <div class="form-group">
+                        {{-- <div class="form-group">
                             <label class="control-label">Kelas</label>
                             <select name="kelas" id="kelas" class="form-control select2" required>
                                 <option>Select</option>
@@ -92,7 +103,7 @@
                                     <strong>{{ $message }}</strong>
                                 </span>
                             @enderror
-                        </div>
+                        </div> --}}
                         <div class="form-group">
                             <label class="control-label">Jenis Kelamin</label>
                             <select name="jenis_kelamin" id="jenis_kelamin" class="form-control select2" required>

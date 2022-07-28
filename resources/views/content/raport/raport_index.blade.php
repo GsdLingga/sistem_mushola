@@ -52,9 +52,10 @@
             <div class="card">
                 <div class="card-body">
                     <div class="float-right">
-                        <a href="{{route('raport.pdf')}}" type="button" class="btn btn-primary waves-effect waves-light btn-sm" style="color: white;">
+                        {{-- href="{{route('raport.pdf')}}"  --}}
+                        <button type="button" class="btn btn-primary waves-effect waves-light btn-sm" style="color: white;" data-toggle="modal" data-target="#exampleModal">
                             <i class="mdi mdi-account-plus align-middle mr-2"></i> Cetak Raport
-                        </a>
+                        </button>
                     </div>
 
                     <h4 class="card-title mb-4">Daftar Nilai Siswa</h4>
@@ -68,10 +69,13 @@
                             <tr>
                                 <th>No</th>
                                 <th>Nama</th>
-                                <th>Nilai Bacaan</th>
-                                <th>Nilai Hafalan</th>
-                                <th>Nilai Praktek</th>
-                                <th>Nilai PAI</th>
+                                <th>Al'qur'an</th>
+                                <th>Iqro'</th>
+                                <th>Aqidah Akhlak</th>
+                                <th>Hafalan Surat</th>
+                                <th>PAI</th>
+                                <th>Tajwid</th>
+                                <th>Khot</th>
                                 <th>Action</th>
                             </tr>
                         </thead>
@@ -80,10 +84,13 @@
                                 <tr>
                                     <td>{{ $loop->iteration }}</td>
                                     <td>{{ $raports->nama }}</td>
-                                    <td>{{ $raports->nilai_bacaan }}</td>
-                                    <td>{{ $raports->nilai_hafalan  }}</td>
-                                    <td>{{ $raports->nilai_praktek }}</td>
-                                    <td>{{ $raports->nilai_pai }}</td>
+                                    <td>{{ $raports->alquran }}</td>
+                                    <td>{{ $raports->iqro  }}</td>
+                                    <td>{{ $raports->aqidah_akhlak }}</td>
+                                    <td>{{ $raports->hafalan_surat }}</td>
+                                    <td>{{ $raports->pai }}</td>
+                                    <td>{{ $raports->tajwid }}</td>
+                                    <td>{{ $raports->khot }}</td>
                                     <td>
                                         <a href="{{route('raport.edit', $raports->id)}}" class="mr-3 text-primary" data-toggle="tooltip" data-placement="top" title="" data-original-title="Edit"><i class="mdi mdi-pencil font-size-18"></i></a>
                                         <form action="{{route('raport.destroy', $raports->id)}}" method="POST" style="display: contents;">
@@ -102,6 +109,56 @@
         </div><!-- end col-->
     </div>
     <!-- end row-->
+
+    <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title" id="exampleModalLabel">Cetak Raport</h5>
+              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+              </button>
+            </div>
+            <div class="modal-body">
+              <form action="{{ route('raport.pdf') }}" method="POST">
+                @csrf
+                <div class="form-group">
+                    <label for="exampleFormControlSelect1">Semester</label>
+                    <select class="form-control" id="selectSemester">
+                        <option value="">Pilih Semester</option>
+                        @foreach ($semester as $sem)
+                            <option value={{$sem->id}}>{{$sem->tahun_ajaran}}</option>
+                        @endforeach
+                    </select>
+                </div>
+                <div class="form-group" id="kelasDiv" style="display: none">
+                    <label for="exampleFormControlSelect1">Kelas</label>
+                    <select class="form-control" id="selectKelas">
+                        <option value="">Pilih Kelas</option>
+                        @foreach ($kelas as $kls)
+                            <option value={{$kls->id}}>{{ucfirst(trans($kls->nama_kelas))}}</option>
+                        @endforeach
+                    </select>
+                </div>
+                <div class="form-group" id="siswaDiv" style="display: none">
+                    <label for="exampleFormControlSelect1">Nama Siswa</label>
+                    <select class="form-control" id="selectSiswa">
+                        {{-- <option value="">Pilih Siswa</option> --}}
+                        {{-- @foreach ($siswa as $sis)
+                            <option value={{$sis->id}}>{{$sis->nama}}</option>
+                        @endforeach --}}
+                    </select>
+                </div>
+              </form>
+            </div>
+            <div class="modal-footer" id="btnDiv" style="display: none">
+                {{-- <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button> --}}
+              <button id="btnSubmit" type="button" class="btn btn-primary" style="float: right;">Submit</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
 @endsection
 @push('js')
     <!-- Buttons examples -->
@@ -120,4 +177,85 @@
     <!-- Datatable init js -->
     <script src="{{asset('assets/js/pages/datatables.init.js')}}"></script>
 
+    <script>
+        $('#myModal').on('shown.bs.modal', function () {
+            $('#myInput').trigger('focus')
+        })
+    </script>
+    <script>
+        // let semester = document.getElementById('selectSemester').value;
+        let semester = document.getElementById('selectSemester');
+        let kelas = document.getElementById('selectKelas');
+        let siswa = document.getElementById('selectSiswa');
+        let kelasDiv = document.getElementById('kelasDiv')
+        let siswaDiv = document.getElementById('siswaDiv')
+        let btnDiv = document.getElementById('btnDiv')
+
+        $('#selectSemester').change(function(){
+            // let semesterOption = semester.options[semester.selectedIndex].text
+            kelasDiv.style.display = "block";
+        })
+
+        $('#selectKelas').change(function(){
+            let semesterValue = semester.value;
+            let kelasValue = kelas.value;
+            // console.log(prefectureOption);
+            $.ajax({
+                type: "GET",
+                url: "api/getSiswaOptions",
+                data: {
+                    semesterValue,
+                    kelasValue,
+                },
+                success: function (response) {
+                    removeOptions(siswa);
+                    $('#selectSiswa').append($('<option>', {value: '', text: 'Select Siswa'}));
+                    for (let index = 0; index < response.length; index++) {
+                        // console.log(response[index])
+                        $('#selectSiswa').append($('<option>', {value: response[index].id, text: response[index].nama}));
+                    }
+                },
+                error: function () {
+                    alert("error");
+                },
+            });
+            siswaDiv.style.display = "block";
+        })
+
+        $('#selectSiswa').change(function(){
+            btnDiv.style.display = "block";
+        })
+
+        $('#btnSubmit').click(function(){
+            if (semester.value === "" || kelas.value === "" || siswa.value === "") {
+                alert("There is an empty input")
+            }else{
+                let semesterValue = semester.value
+                let kelasValue = kelas.value
+                let siswaValue = siswa.value
+                $.ajax({
+                    type: "POST",
+                    url: "/create-pdf-file",
+                    data: { "_token": "{{ csrf_token() }}",
+                    semesterValue, kelasValue, siswaValue },
+                    success: function (response) {
+                        console.log(response)
+                    // prefectureOption.value = response[1].id;
+                    // city.value = response[0].city;
+                    // local.value = response[0].local;
+                    },
+                    error: function () {
+                        alert("error");
+                    },
+                });
+            }
+        })
+
+        function removeOptions(selectElement) {
+            var i, L = selectElement.options.length - 1;
+            for(i = L; i >= 0; i--) {
+                selectElement.remove(i);
+            }
+        }
+    </script>
 @endpush

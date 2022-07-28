@@ -54,7 +54,23 @@
                     <form class="custom-validation" action="{{ route('raport.update', $raport->id) }}" method="POST">
                         @method('PATCH')
                         @csrf
-                        <div class="form-group">
+                        {{-- <div class="form-group" id="kelasDiv">
+                            <label class="control-label">Nama Kelas</label>
+                            <select name="kelasValue" id="selectKelas" class="form-control select2" required>
+                                <option>Select</option>
+                                <optgroup label="Nama Kelas">
+                                    @foreach ($kelas as $kls)
+                                        <option <?php if($raport->id_kelas == $kls->id) echo "selected=\"selected\""; ?> value="{{ $kls->id }}">{{ $kls->nama }}</option>
+                                    @endforeach
+                                </optgroup>
+                            </select>
+                            @error('kelasValue')
+                                <span class="invalid-feedback" role="alert">
+                                    <strong>{{ $message }}</strong>
+                                </span>
+                            @enderror
+                        </div> --}}
+                        {{-- <div class="form-group">
                             <label class="control-label">Nama Siswa</label>
                             <select name="nama" id="nama" class="form-control select2" required>
                                 <option>Select</option>
@@ -69,12 +85,12 @@
                                     <strong>{{ $message }}</strong>
                                 </span>
                             @enderror
-                        </div>
+                        </div> --}}
                         <div class="form-group">
-                            <label>Nilai Bacaan</label>
+                            <label>Siswa</label>
                             <div>
-                                <input name="nilai_bacaan" id="nilai_bacaan" value="{{ $raport->nilai_bacaan }}" data-parsley-type="number" type="text" class="form-control" required placeholder="Enter only numbers"/>
-                                @error('nilai_bacaan')
+                                <input name="nama" id="nama" value="{{ $siswa->nama }}" type="text" class="form-control" required disabled/>
+                                @error('nama')
                                     <span class="invalid-feedback" role="alert">
                                         <strong>{{ $message }}</strong>
                                     </span>
@@ -82,10 +98,10 @@
                             </div>
                         </div>
                         <div class="form-group">
-                            <label>Nilai Hafalan</label>
+                            <label>Alquran</label>
                             <div>
-                                <input name="nilai_hafalan" id="nilai_hafalan" value="{{ $raport->nilai_hafalan }}" data-parsley-type="number" type="text" class="form-control" required placeholder="Enter only numbers"/>
-                                @error('nilai_hafalan')
+                                <input name="alquran" id="alquran" value="{{ $raport->alquran }}" data-parsley-type="number" type="text" class="form-control" required placeholder="Enter only numbers"/>
+                                @error('alquran')
                                     <span class="invalid-feedback" role="alert">
                                         <strong>{{ $message }}</strong>
                                     </span>
@@ -93,10 +109,10 @@
                             </div>
                         </div>
                         <div class="form-group">
-                            <label>Nilai Praktek</label>
+                            <label>Iqro</label>
                             <div>
-                                <input name="nilai_praktek" id="nilai_praktek" value="{{ $raport->nilai_praktek }}" data-parsley-type="number" type="text" class="form-control" required placeholder="Enter only numbers"/>
-                                @error('nilai_praktek')
+                                <input name="iqro" id="iqro" value="{{ $raport->iqro }}" data-parsley-type="number" type="text" class="form-control" required placeholder="Enter only numbers"/>
+                                @error('iqro')
                                     <span class="invalid-feedback" role="alert">
                                         <strong>{{ $message }}</strong>
                                     </span>
@@ -104,10 +120,54 @@
                             </div>
                         </div>
                         <div class="form-group">
-                            <label>Nilai PAI</label>
+                            <label>Aqidah Akhlak</label>
                             <div>
-                                <input name="nilai_pai" id="nilai_pai" value="{{ $raport->nilai_pai }}" data-parsley-type="number" type="text" class="form-control" required placeholder="Enter only numbers"/>
-                                @error('nilai_pai')
+                                <input name="aqidah_akhlak" id="aqidah_akhlak" value="{{ $raport->aqidah_akhlak }}" data-parsley-type="number" type="text" class="form-control" required placeholder="Enter only numbers"/>
+                                @error('aqidah_akhlak')
+                                    <span class="invalid-feedback" role="alert">
+                                        <strong>{{ $message }}</strong>
+                                    </span>
+                                @enderror
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label>Hafalan Surat</label>
+                            <div>
+                                <input name="hafalan_surat" id="hafalan_surat" value="{{ $raport->hafalan_surat }}" data-parsley-type="number" type="text" class="form-control" required placeholder="Enter only numbers"/>
+                                @error('hafalan_surat')
+                                    <span class="invalid-feedback" role="alert">
+                                        <strong>{{ $message }}</strong>
+                                    </span>
+                                @enderror
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label>PAI</label>
+                            <div>
+                                <input name="pai" id="pai" value="{{ $raport->pai }}" data-parsley-type="number" type="text" class="form-control" required placeholder="Enter only numbers"/>
+                                @error('pai')
+                                    <span class="invalid-feedback" role="alert">
+                                        <strong>{{ $message }}</strong>
+                                    </span>
+                                @enderror
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label>Tajwid</label>
+                            <div>
+                                <input name="tajwid" id="tajwid" value="{{ $raport->tajwid }}" data-parsley-type="number" type="text" class="form-control" required placeholder="Enter only numbers"/>
+                                @error('tajwid')
+                                    <span class="invalid-feedback" role="alert">
+                                        <strong>{{ $message }}</strong>
+                                    </span>
+                                @enderror
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label>Khot</label>
+                            <div>
+                                <input name="khot" id="khot" value="{{ $raport->khot }}" data-parsley-type="number" type="text" class="form-control" required placeholder="Enter only numbers"/>
+                                @error('khot')
                                     <span class="invalid-feedback" role="alert">
                                         <strong>{{ $message }}</strong>
                                     </span>

@@ -69,6 +69,10 @@
                                                         <label class="custom-control-label" for="hadir{{$loop->iteration}}">Hadir</label>
                                                     </div>
                                                     <div class="custom-control custom-radio mr-3">
+                                                        <input type="radio" id="sakit{{$loop->iteration}}" name="radio[absen{{$loop->iteration}}]" value="sakit-{{ $absen->id }}" class="custom-control-input">
+                                                        <label class="custom-control-label" for="sakit{{$loop->iteration}}">Sakit</label>
+                                                    </div>
+                                                    <div class="custom-control custom-radio mr-3">
                                                         <input type="radio" id="izin{{$loop->iteration}}" name="radio[absen{{$loop->iteration}}]" value="izin-{{ $absen->id }}" class="custom-control-input">
                                                         <label class="custom-control-label" for="izin{{$loop->iteration}}">Izin</label>
                                                     </div>
@@ -77,7 +81,7 @@
                                                         <label class="custom-control-label" for="alpa{{$loop->iteration}}">Alpa</label>
                                                     </div>
                                                 </div>
-                                            </div>   
+                                            </div>
                                         </td>
                                     </tr>
                                 @endforeach
@@ -103,7 +107,7 @@
     <script src="{{asset('assets/libs/datatables.net-buttons/js/buttons.html5.min.js')}}"></script>
     <script src="{{asset('assets/libs/datatables.net-buttons/js/buttons.print.min.js')}}"></script>
     <script src="{{asset('assets/libs/datatables.net-buttons/js/buttons.colVis.min.js')}}"></script>
-    
+
     <script src="{{asset('assets/libs/datatables.net-keytable/js/dataTables.keyTable.min.js')}}"></script>
     <script src="{{asset('assets/libs/datatables.net-select/js/dataTables.select.min.js')}}"></script>
 

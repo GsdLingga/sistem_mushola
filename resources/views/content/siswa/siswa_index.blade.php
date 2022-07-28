@@ -59,7 +59,8 @@
                             <tr>
                                 <th>No</th>
                                 <th>Nama</th>
-                                <th>Kelas</th>
+                                <th>No Induk</th>
+                                {{-- <th>Kelas</th> --}}
                                 <th>Jenis Kelamin</th>
                                 <th>Alamat</th>
                                 <th>Telepon</th>
@@ -71,7 +72,8 @@
                                 <tr>
                                     <td>{{ $loop->iteration }}</td>
                                     <td>{{ $siswas->nama }}</td>
-                                    <td>{{ Str::ucfirst($siswas->kelas) }}</td>
+                                    <td>{{ $siswas->no_induk }}</td>
+                                    {{-- <td>{{ Str::ucfirst($siswas->kelas) }}</td> --}}
                                     <td>{{ Str::ucfirst($siswas->jenis_kelamin)  }}</td>
                                     <td>{{ $siswas->alamat }}</td>
                                     <td>{{ $siswas->telepon }}</td>
@@ -87,7 +89,7 @@
                             @endforeach
                         </tbody>
                     </table>
-                
+
                 </div> <!-- end card body-->
             </div> <!-- end card -->
         </div><!-- end col-->
@@ -104,7 +106,7 @@
     <script src="{{asset('assets/libs/datatables.net-buttons/js/buttons.html5.min.js')}}"></script>
     <script src="{{asset('assets/libs/datatables.net-buttons/js/buttons.print.min.js')}}"></script>
     <script src="{{asset('assets/libs/datatables.net-buttons/js/buttons.colVis.min.js')}}"></script>
-    
+
     <script src="{{asset('assets/libs/datatables.net-keytable/js/dataTables.keyTable.min.js')}}"></script>
     <script src="{{asset('assets/libs/datatables.net-select/js/dataTables.select.min.js')}}"></script>
 

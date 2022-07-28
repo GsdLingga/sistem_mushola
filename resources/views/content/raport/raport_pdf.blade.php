@@ -26,6 +26,12 @@
         p{
             margin: 0;
         }
+        .bold{
+            font-weight: bold
+        }
+        .text-center{
+            text-align: center
+        }
 
     </style>
 </head>
@@ -35,46 +41,46 @@
 
         <table class="table-font" style="width:100%;">
             <tr>
-                <td style="width: 25%">Nama Musholla</td>
-                <td style="width: 40%">: Jabal Rahmah</td>
-                <td style="width: 15%">Kelas</td>
-                <td style="width: 10%">:</td>
+                <td class="bold" style="width: 25%;">Nama Musholla</td>
+                <td style="width: 35%">: Jabal Rahmah</td>
+                <td class="bold" style="width: 15%">Kelas</td>
+                <td style="width: 15%">: {{$kelas}}</td>
             </tr>
             <tr>
-                <td style="width: 25%">Alamat</td>
-                <td style="width: 40%">:</td>
-                <td style="width: 15%">Semester</td>
-                <td style="width: 10%">:</td>
+                <td class="bold" style="width: 25%">Alamat</td>
+                <td style="width: 35%">: {{$siswa->alamat}}</td>
+                <td class="bold" style="width: 15%">Semester</td>
+                <td style="width: 15%">: {{$semester}}</td>
             </tr>
             <tr>
-                <td style="width: 25%">Nama Peserta Didik</td>
-                <td style="width: 40%">:</td>
-                <td style="width: 15%">Tahun Pelajaran</td>
-                <td style="width: 10%">:</td>
+                <td class="bold" style="width: 25%">Nama Peserta Didik</td>
+                <td style="width: 35%">: {{$siswa->nama}}</td>
+                <td class="bold" style="width: 15%">Tahun Pelajaran</td>
+                <td style="width: 15%">: {{$tahun_pelajaran}}</td>
             </tr>
             <tr>
-                <td style="width: 25%">No. Induk</td>
-                <td style="width: 40%">:</td>
+                <td class="bold" style="width: 25%">No. Induk</td>
+                <td style="width: 35%">: {{$siswa->id}}</td>
                 <td style="width: 15%"></td>
-                <td style="width: 10%"></td>
+                <td style="width: 15%"></td>
             </tr>
         </table>
 
         <table class="table table-font" style="width:100%;">
             <tr>
-                <td colspan="2" style="width: 100%">A. ASPEK KEPRIBADIAN</td>
+                <td colspan="2" class="bold" style="width: 100%;">A. ASPEK KEPRIBADIAN</td>
             </tr>
             <tr>
-                <td style="width: 25%">1. SPIRITUAL</td>
-                <td style="width: 75%; text-align:center;">DESKRIPSI</td>
+                <td class="bold" style="width: 25%;">1. SPIRITUAL</td>
+                <td class="bold text-center" style="width: 75%;">DESKRIPSI</td>
             </tr>
             <tr >
                 <td class="blank_row" style="width: 25%"></td>
                 <td style="width: 75%"> </td>
             </tr>
             <tr>
-                <td style="width: 25%">2. SOSIAL</td>
-                <td style="width: 75%; text-align:center;">DESKRIPSI</td>
+                <td class="bold" style="width: 25%;">2. SOSIAL</td>
+                <td class="bold text-center" style="width: 75%;">DESKRIPSI</td>
             </tr>
             <tr>
                 <td class="blank_row" style="width: 25%"> </td>
@@ -84,47 +90,47 @@
 
         <table class="table table-font" style="width:100%;">
             <tr>
-                <td rowspan="2" style="width: 33%">B. PENGETAHUAN</td>
-                <td colspan="2" style="width: 33%; text-align:center;"> NILAI</td>
+                <td rowspan="2" class="bold" style="width: 33%;">B. PENGETAHUAN</td>
+                <td colspan="2" class="bold text-center" style="width: 33%;"> NILAI</td>
             </tr>
             <tr>
                 <td  style="width: 33%; text-align:center;">PRESTASI</td>
                 <td  style="width: 33%; text-align:center;">RATA-RATA</td>
             </tr>
             <tr>
-                <td style="width: 33%">1. AL'QUR'AN</td>
-                <td style="width: 33%"></td>
-                <td style="width: 33%"></td>
+                <td style="width: 33%;">1. AL'QUR'AN</td>
+                <td style="width: 33%; text-align:center">{{$nilai->alquran}}</td>
+                <td style="width: 33%; text-align:center">{{$rata_rata['alquran']}}</td>
             </tr>
             <tr>
-                <td style="width: 33%">2. IQRO'</td>
-                <td style="width: 33%"></td>
-                <td style="width: 33%"></td>
+                <td style="width: 33%;">2. IQRO'</td>
+                <td style="width: 33%; text-align:center">{{$nilai->iqro}}</td>
+                <td style="width: 33%; text-align:center">{{$rata_rata['iqro']}}</td>
             </tr>
             <tr>
-                <td style="width: 33%">3. AQIDAH AKHLAQ</td>
-                <td style="width: 33%"></td>
-                <td style="width: 33%"></td>
+                <td style="width: 33%;">3. AQIDAH AKHLAQ</td>
+                <td style="width: 33%; text-align:center">{{$nilai->aqidah_akhlak}}</td>
+                <td style="width: 33%; text-align:center">{{$rata_rata['aqidah_akhlak']}}</td>
             </tr>
             <tr>
-                <td style="width: 33%">4.HAFALAN SURAT</td>
-                <td style="width: 33%"></td>
-                <td style="width: 33%"></td>
+                <td style="width: 33%;">4.HAFALAN SURAT</td>
+                <td style="width: 33%; text-align:center">{{$nilai->hafalan_surat}}</td>
+                <td style="width: 33%; text-align:center">{{$rata_rata['hafalan_surat']}}</td>
             </tr>
             <tr>
-                <td style="width: 33%">5.PAI</td>
-                <td style="width: 33%"></td>
-                <td style="width: 33%"></td>
+                <td style="width: 33%;">5.PAI</td>
+                <td style="width: 33%; text-align:center">{{$nilai->pai}}</td>
+                <td style="width: 33%; text-align:center">{{$rata_rata['pai']}}</td>
             </tr>
             <tr>
-                <td style="width: 33%">6. TAJWID</td>
-                <td style="width: 33%"></td>
-                <td style="width: 33%"></td>
+                <td style="width: 33%;">6. TAJWID</td>
+                <td style="width: 33%; text-align:center">{{$nilai->tajwid}}</td>
+                <td style="width: 33%; text-align:center">{{$rata_rata['tajwid']}}</td>
             </tr>
             <tr>
-                <td style="width: 33%">7. KHOT</td>
-                <td style="width: 33%"></td>
-                <td style="width: 33%"></td>
+                <td style="width: 33%;">7. KHOT</td>
+                <td style="width: 33%; text-align:center">{{$nilai->khot}}</td>
+                <td style="width: 33%; text-align:center">{{$rata_rata['khot']}}</td>
             </tr>
             <tr>
                 <td class="blank_row" style="width: 33%"></td>
@@ -132,24 +138,24 @@
                 <td style="width: 33%"></td>
             </tr>
             <tr>
-                <td style="width: 33%">RATA-RATA</td>
-                <td style="width: 33%"></td>
-                <td style="width: 33%"></td>
+                <td style="width: 33%;">RATA-RATA</td>
+                <td style="width: 33%; text-align:center">{{$rata_rata['siswa']}}</td>
+                <td style="width: 33%; text-align:center">{{$rata_rata['all']}}</td>
             </tr>
             <tr>
                 <td style="width: 33%"></td>
                 <td style="width: 33%">SAKIT</td>
-                <td style="width: 33%">hari</td>
+                <td style="width: 33%">{{$kehadiran['sakit']}} hari</td>
             </tr>
             <tr>
-                <td style="width: 33%">JUMLAH HADIR KARENA</td>
+                <td style="width: 33%;">JUMLAH HADIR KARENA</td>
                 <td style="width: 33%">IZIN</td>
-                <td style="width: 33%">hari</td>
+                <td style="width: 33%">{{$kehadiran['izin']}} hari</td>
             </tr>
             <tr>
                 <td style="width: 33%"></td>
                 <td style="width: 33%">ALPA</td>
-                <td style="width: 33%">hari</td>
+                <td style="width: 33%">{{$kehadiran['alpa']}} hari</td>
             </tr>
             <tr>
                 <td class="blank_row" style="width: 33%"></td>
@@ -157,11 +163,11 @@
                 <td style="width: 33%"></td>
             </tr>
             <tr>
-                <td style="width: 33%">RANKING</td>
-                <td colspan="2"></td>
+                <td style="width: 33%;">RANKING</td>
+                <td colspan="2">{{$ranking}}</td>
             </tr>
             <tr>
-                <td style="width: 33%">CATATAN</td>
+                <td style="width: 33%;">CATATAN</td>
                 <td colspan="2"></td>
             </tr>
         </table>

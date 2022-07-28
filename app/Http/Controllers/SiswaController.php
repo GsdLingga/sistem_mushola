@@ -45,18 +45,20 @@ class SiswaController extends Controller
     {
         $siswa = $request->validate([
             'name' => ['required', 'string', 'max:255'],
+            'no_induk' => ['required', 'string', 'numeric'],
             'tgl_lahir' => ['required', 'date'],
-            'kelas' => ['required', 'string'],
+            // 'kelas' => ['required', 'string'],
             'jenis_kelamin' => ['required', 'string'],
             'alamat' => ['required', 'string', 'max:255'],
             'telepon' => ['required', 'string', 'numeric', 'digits_between:10,13'],
         ]);
 
-        
+
         $siswa  = Siswa::create([
             'nama'          => $request->name,
+            'no_induk'      => $request->no_induk,
             'tgl_lahir'     => $request->tgl_lahir,
-            'kelas'         => $request->kelas,
+            // 'kelas'         => $request->kelas,
             'jenis_kelamin' => $request->jenis_kelamin,
             'alamat'        => $request->alamat,
             'telepon'       => $request->telepon,
@@ -65,7 +67,7 @@ class SiswaController extends Controller
         ]);
 
         return redirect()->route('siswa.index')->with('success', 'Siswa Created Successfully');
-        
+
     }
 
     /**
@@ -105,6 +107,7 @@ class SiswaController extends Controller
     {
         $siswa = $request->validate([
             'name' => ['required', 'string', 'max:255'],
+            'no_induk' => ['required', 'string', 'numeric'],
             'tgl_lahir' => ['required', 'date'],
             'jenis_kelamin' => ['required', 'string'],
             'alamat' => ['required', 'string', 'max:255'],
@@ -113,6 +116,7 @@ class SiswaController extends Controller
 
         $siswa = Siswa::find($id);
         $siswa->nama            = $request->name;
+        $siswa->no_induk        = $request->no_induk;
         $siswa->tgl_lahir       = $request->tgl_lahir;
         $siswa->kelas           = $request->kelas;
         $siswa->jenis_kelamin   = $request->jenis_kelamin;
@@ -133,7 +137,7 @@ class SiswaController extends Controller
     {
         $siswa = Siswa::find($id);
         $siswa->status = 0;
-        
+
         $siswa->save();
 
         return redirect()->route('siswa.index')->with('success', 'Siswa Deleted Successfully');

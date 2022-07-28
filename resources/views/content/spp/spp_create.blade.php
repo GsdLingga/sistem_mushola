@@ -70,7 +70,7 @@
                             @enderror
                         </div>
                         <div class="form-group mb-4">
-                            <label class="control-label">Tanggal Lahir</label>
+                            <label class="control-label">Tanggal Pembayaran</label>
                             <div class="input-group">
                                 <input name="tanggal" id="tanggal" type="text" class="form-control" data-provide="datepicker" data-date-format="yyyy-mm-dd" data-date-autoclose="true" autocomplete="off">
                                 <div class="input-group-append">

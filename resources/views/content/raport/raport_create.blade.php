@@ -53,14 +53,30 @@
                     </p>
                     <form class="custom-validation" action="{{ route('raport.store') }}" method="POST">
                         @csrf
-                        <div class="form-group">
+                        <div class="form-group" id="kelasDiv">
+                            <label class="control-label">Nama Kelas</label>
+                            <select name="kelasValue" id="selectKelas" class="form-control select2" required>
+                                <option>Select</option>
+                                <optgroup label="Nama Kelas">
+                                    @foreach ($kelas as $kls)
+                                        <option value="{{ $kls->id }}">{{ Str::ucfirst($kls->nama_kelas) }}</option>
+                                    @endforeach
+                                </optgroup>
+                            </select>
+                            @error('kelasValue')
+                                <span class="invalid-feedback" role="alert">
+                                    <strong>{{ $message }}</strong>
+                                </span>
+                            @enderror
+                        </div>
+                        <div class="form-group" id="siswaDiv">
                             <label class="control-label">Nama Siswa</label>
-                            <select name="nama" id="nama" class="form-control select2" required>
+                            <select name="nama" id="selectSiswa" class="form-control select2" required>
                                 <option>Select</option>
                                 <optgroup label="Nama Siswa">
-                                    @foreach ($siswa as $siswas)
+                                    {{-- @foreach ($siswa as $siswas)
                                         <option value="{{ $siswas->id }}">{{ $siswas->nama }}</option>
-                                    @endforeach
+                                    @endforeach --}}
                                 </optgroup>
                             </select>
                             @error('nama')
@@ -70,10 +86,10 @@
                             @enderror
                         </div>
                         <div class="form-group">
-                            <label>Nilai Bacaan</label>
+                            <label>Alquran</label>
                             <div>
-                                <input name="nilai_bacaan" id="nilai_bacaan" data-parsley-type="number" type="text" class="form-control" required placeholder="Enter only numbers"/>
-                                @error('nilai_bacaan')
+                                <input name="alquran" id="alquran" data-parsley-type="number" type="text" class="form-control" required placeholder="Enter only numbers"/>
+                                @error('alquran')
                                     <span class="invalid-feedback" role="alert">
                                         <strong>{{ $message }}</strong>
                                     </span>
@@ -81,10 +97,10 @@
                             </div>
                         </div>
                         <div class="form-group">
-                            <label>Nilai Hafalan</label>
+                            <label>Iqro</label>
                             <div>
-                                <input name="nilai_hafalan" id="nilai_hafalan" data-parsley-type="number" type="text" class="form-control" required placeholder="Enter only numbers"/>
-                                @error('nilai_hafalan')
+                                <input name="iqro" id="iqro" data-parsley-type="number" type="text" class="form-control" required placeholder="Enter only numbers"/>
+                                @error('iqro')
                                     <span class="invalid-feedback" role="alert">
                                         <strong>{{ $message }}</strong>
                                     </span>
@@ -92,10 +108,10 @@
                             </div>
                         </div>
                         <div class="form-group">
-                            <label>Nilai Praktek</label>
+                            <label>Aqidah Akhlak</label>
                             <div>
-                                <input name="nilai_praktek" id="nilai_praktek" data-parsley-type="number" type="text" class="form-control" required placeholder="Enter only numbers"/>
-                                @error('nilai_praktek')
+                                <input name="aqidah_akhlak" id="aqidah_akhlak" data-parsley-type="number" type="text" class="form-control" required placeholder="Enter only numbers"/>
+                                @error('aqidah_akhlak')
                                     <span class="invalid-feedback" role="alert">
                                         <strong>{{ $message }}</strong>
                                     </span>
@@ -103,10 +119,43 @@
                             </div>
                         </div>
                         <div class="form-group">
-                            <label>Nilai PAI</label>
+                            <label>Hafalan Surat</label>
                             <div>
-                                <input name="nilai_pai" id="nilai_pai" data-parsley-type="number" type="text" class="form-control" required placeholder="Enter only numbers"/>
-                                @error('nilai_pai')
+                                <input name="hafalan_surat" id="hafalan_surat" data-parsley-type="number" type="text" class="form-control" required placeholder="Enter only numbers"/>
+                                @error('hafalan_surat')
+                                    <span class="invalid-feedback" role="alert">
+                                        <strong>{{ $message }}</strong>
+                                    </span>
+                                @enderror
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label>PAI</label>
+                            <div>
+                                <input name="pai" id="pai" data-parsley-type="number" type="text" class="form-control" required placeholder="Enter only numbers"/>
+                                @error('pai')
+                                    <span class="invalid-feedback" role="alert">
+                                        <strong>{{ $message }}</strong>
+                                    </span>
+                                @enderror
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label>Tajwid</label>
+                            <div>
+                                <input name="tajwid" id="tajwid" data-parsley-type="number" type="text" class="form-control" required placeholder="Enter only numbers"/>
+                                @error('tajwid')
+                                    <span class="invalid-feedback" role="alert">
+                                        <strong>{{ $message }}</strong>
+                                    </span>
+                                @enderror
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label>Khot</label>
+                            <div>
+                                <input name="khot" id="khot" data-parsley-type="number" type="text" class="form-control" required placeholder="Enter only numbers"/>
+                                @error('khot')
                                     <span class="invalid-feedback" role="alert">
                                         <strong>{{ $message }}</strong>
                                     </span>
@@ -141,4 +190,40 @@
     <script src="{{asset('assets/libs/bootstrap-maxlength/bootstrap-maxlength.min.js')}}"></script>
 
     <script src="{{asset('assets/js/pages/form-advanced.init.js')}}"></script>
+
+    <script>
+        let kelas = document.getElementById('selectKelas');
+        let siswa = document.getElementById('selectSiswa');
+        let kelasDiv = document.getElementById('kelasDiv')
+        let siswaDiv = document.getElementById('siswaDiv')
+
+        $('#selectKelas').change(function(){
+            let kelasValue = kelas.value;
+            $.ajax({
+                type: "GET",
+                url: "/api/getSiswaCreate",
+                data: {
+                    kelasValue,
+                },
+                success: function (response) {
+                    removeOptions(siswa);
+                    $('#selectSiswa').append($('<option>', {value: '', text: 'Select Siswa'}));
+                    for (let index = 0; index < response.length; index++) {
+                        // console.log(response[index])
+                        $('#selectSiswa').append($('<option>', {value: response[index].id, text: response[index].nama}));
+                    }
+                },
+                error: function () {
+                    alert("error");
+                },
+            });
+        })
+
+        function removeOptions(selectElement) {
+            var i, L = selectElement.options.length - 1;
+            for(i = L; i >= 0; i--) {
+                selectElement.remove(i);
+            }
+        }
+    </script>
 @endpush
