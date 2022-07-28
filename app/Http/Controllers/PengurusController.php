@@ -3,8 +3,8 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\Models\Siswa;
-
+use App\Models\AnggotaKelas;
+use App\Models\Semester;
 class PengurusController extends Controller
 {
     /**
@@ -14,12 +14,24 @@ class PengurusController extends Controller
      */
     public function index()
     {
-        $siswa = Siswa::all()->count();
-        $kelasA = Siswa::where('kelas', 'a')->count();
-        $kelasB = Siswa::where('kelas', 'b')->count();
-        $kelasC = Siswa::where('kelas', 'c')->count();
-        $kelasD = Siswa::where('kelas', 'd')->count();
-
+        $semester_aktif = Semester::where('status', '1')->first();
+        $siswa = AnggotaKelas::where('id_semester', $semester_aktif->id)->count();
+        $kelasA = AnggotaKelas::where([
+            ['id_semester', '=', $semester_aktif->id],
+            ['id_kelas', '=', '1']
+        ])->count();
+        $kelasB = AnggotaKelas::where([
+            ['id_semester', $semester_aktif->id],
+            ['id_kelas', 2]
+        ])->count();
+        $kelasC = AnggotaKelas::where([
+            ['id_semester', $semester_aktif->id],
+            ['id_kelas', 3]
+        ])->count();
+        $kelasD = AnggotaKelas::where([
+            ['id_semester', $semester_aktif->id],
+            ['id_kelas', 4]
+        ])->count();
         return view('content.home', compact(
             'siswa',
             'kelasA',
