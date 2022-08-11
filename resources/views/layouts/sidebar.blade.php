@@ -16,7 +16,7 @@
                             <span>Dashboard</span>
                         </a>
                     </li>
-                
+
                     <li>
                         <a href="{{route('user.index')}}" class=" waves-effect">
                             <i class="ri-user-line"></i>
@@ -55,7 +55,7 @@
                         </a>
                         <ul class="sub-menu" aria-expanded="false">
                             <li><a href="{{route('siswa.index')}}">Daftar Siswa</a></li>
-                            {{-- <li><a href="javascript: void(0);">Nilai</a></li> --}}
+                            <li><a href="{{route('anggota_kelas.index')}}">Daftar Kelas</a></li>
                             <li><a href="{{route('raport.index')}}">Raport</a></li>
                             <li><a href="{{route('absensi.index')}}">Absen</a></li>
                         </ul>
@@ -80,7 +80,7 @@
                             <span>Absen</span>
                         </a>
                     </li>     --}}
-                @endif 
+                @endif
                 @if (auth()->user()->role == 'Admin' || auth()->user()->role == 'Pengurus')
                     <li>
                         <a href="{{route('zakat.index')}}" class=" waves-effect">
@@ -101,7 +101,7 @@
                             <i class="ri-calendar-2-line"></i>
                             <span>Jadwal Pengajian</span>
                         </a>
-                    </li> 
+                    </li>
                 @endif
             </ul>
         </div>

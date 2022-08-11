@@ -35,9 +35,9 @@
 
     </style>
 </head>
-<body style="background-image: url({{ storage_path('app/public/pdf/latar.jpeg') }}); background-repeat: no-repeat; background-size: auto; background-size: 100% 100%;">
+<body style="background-image: url({{ asset('pdf/latar.jpeg') }}); background-repeat: no-repeat; background-size: auto; background-size: 100% 100%;">
     <div style="margin: 80px 50px 0 80px">
-        <img src="{{ storage_path('app/public/pdf/header.png') }}" style="width: 100%">
+        <img src="{{ asset('pdf/header.png') }}" style="width: 100%">
 
         <table class="table-font" style="width:100%;">
             <tr>

@@ -1,5 +1,5 @@
 @extends('layouts.app2')
-@section('title', 'Kelola Absensi')
+@section('title', 'Kelola Anggota Kelas')
 @push('css')
     <link href="{{asset('assets/libs/datatables.net-buttons-bs4/css/buttons.bootstrap4.min.css')}}" rel="stylesheet" type="text/css" />
     <link href="{{asset('assets/libs/datatables.net-select-bs4/css/select.bootstrap4.min.css')}}" rel="stylesheet" type="text/css" />
@@ -10,14 +10,14 @@
     <div class="row">
         <div class="col-12">
             <div class="page-title-box d-flex align-items-center justify-content-between">
-                <h4 class="mb-0">Absensi</h4>
+                <h4 class="mb-0">Anggota Kelas</h4>
 
-                <a href="{{route('absensi.create')}}" type="button" class="btn btn-primary waves-effect waves-light" style="color: white;">
-                    <i class="mdi mdi-account-plus align-middle mr-2"></i> Tambah Absensi
+                <a href="{{route('anggota_kelas.create')}}" type="button" class="btn btn-primary waves-effect waves-light" style="color: white;">
+                    <i class="mdi mdi-account-plus align-middle mr-2"></i> Tambah Anggota Kelas
                 </a>
             </div>
             @if ($errors->any())
-                <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                <div class="alert alert-dange alert-dismissible fade showr" role="alert">
                     @foreach ($errors->all() as $error)
                     <i class="mdi mdi-block-helper mr-2"></i>
                     {{ $error }}
@@ -44,47 +44,27 @@
             <div class="card">
                 <div class="card-body">
                     <div class="float-right">
-                        {{-- <a href="#" class="dropdown-toggle arrow-none card-drop" data-toggle="dropdown" aria-expanded="false">
-                            <i class="mdi mdi-dots-vertical"></i>
-                        </a>
-                        <div class="dropdown-menu dropdown-menu-right">
-                            <!-- item-->
-                            <a href="javascript:void(0);" class="dropdown-item">Sales Report</a>
-                            <!-- item-->
-                            <a href="javascript:void(0);" class="dropdown-item">Export Report</a>
-                            <!-- item-->
-                            <a href="javascript:void(0);" class="dropdown-item">Profit</a>
-                            <!-- item-->
-                            <a href="javascript:void(0);" class="dropdown-item">Action</a>
-                        </div> --}}
                     </div>
-
-                    <h4 class="card-title mb-4">Daftar Absensi</h4>
-                    {{-- <p class="card-title-desc">
-                        This example shows the multi option. Note how a click on a row will toggle its selected state without effecting other rows,
-                        unlike the os and single options shown in other examples.
-                    </p> --}}
-
+                    <h4 class="card-title mb-4">Daftar Anggota Kelas</h4>
                     <table id="datatable" class="table table-bordered dt-responsive nowrap" style="border-collapse: collapse; border-spacing: 0; width: 100%;">
                         <thead>
                             <tr>
                                 <th>No</th>
-                                <th>Nama</th>
-                                <th>Status</th>
-                                <th>Tanggal</th>
-                                <th>Action</th>
+                                <th>Nama Siswa</th>
+                                <th>Kelas</th>
+                                <th>Semester</th>
                             </tr>
                         </thead>
                         <tbody>
-                            @foreach ($absensi as $absen)
+                            @foreach ($anggota_kelas as $anggota)
                                 <tr>
                                     <td>{{ $loop->iteration }}</td>
-                                    <td>{{ $absen->nama }}</td>
-                                    <td>{{ Str::ucfirst($absen->status)  }}</td>
-                                    <td>{{ Carbon\Carbon::parse($absen->tgl)->translatedFormat('d F Y') }}</td>
+                                    <td>{{ $anggota->nama }}</td>
+                                    <td>{{ Str::ucfirst($anggota->nama_kelas) }}</td>
+                                    <td>{{ $anggota->tahun_ajaran }}</td>
                                     <td>
-                                        <a href="{{route('absensi.edit', $absen->id)}}" class="mr-3 text-primary" data-toggle="tooltip" data-placement="top" title="" data-original-title="Edit"><i class="mdi mdi-pencil font-size-18"></i></a>
-                                        <form action="{{route('absensi.destroy', $absen->id)}}" method="POST" style="display: contents;">
+                                        <a href="{{route('anggota_kelas.edit', $anggota->id)}}" class="mr-3 text-primary" data-toggle="tooltip" data-placement="top" title="" data-original-title="Edit"><i class="mdi mdi-pencil font-size-18"></i></a>
+                                        <form action="{{route('anggota_kelas.destroy', $anggota->id)}}" method="POST" style="display: contents;">
                                             @method('DELETE')
                                             @csrf
                                             <button class="text-danger" style="background-color: transparent; border: 0;" data-toggle="tooltip" data-placement="top" title="" data-original-title="Delete"><i class="mdi mdi-trash-can font-size-18"></i></button>

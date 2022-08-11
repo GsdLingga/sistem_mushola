@@ -244,8 +244,8 @@
                     // city.value = response[0].city;
                     // local.value = response[0].local;
                     },
-                    error: function () {
-                        alert("error");
+                    error: function (e) {
+                        console.log(e)
                     },
                 });
             }
