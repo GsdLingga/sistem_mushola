@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use App\Models\AnggotaKelas;
 use App\Models\Semester;
 class PengurusController extends Controller
@@ -14,6 +15,7 @@ class PengurusController extends Controller
      */
     public function index()
     {
+        $role = Auth::user()->role;
         $semester_aktif = Semester::where('status', '1')->first();
         $siswa = AnggotaKelas::where('id_semester', $semester_aktif->id)->count();
         $kelasA = AnggotaKelas::where([
@@ -34,6 +36,7 @@ class PengurusController extends Controller
         ])->count();
         return view('content.home', compact(
             'siswa',
+            'role',
             'kelasA',
             'kelasB',
             'kelasC',

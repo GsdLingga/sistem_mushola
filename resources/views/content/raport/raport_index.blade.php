@@ -149,11 +149,11 @@
                         @endforeach --}}
                     </select>
                 </div>
+                <div class="modal-footer" id="btnDiv" style="display: none">
+                    {{-- <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button> --}}
+                  <button id="btnSubmit" type="submit" class="btn btn-primary" style="float: right;">Submit</button>
+                </div>
               </form>
-            </div>
-            <div class="modal-footer" id="btnDiv" style="display: none">
-                {{-- <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button> --}}
-              <button id="btnSubmit" type="button" class="btn btn-primary" style="float: right;">Submit</button>
             </div>
           </div>
         </div>
@@ -246,6 +246,7 @@
                     },
                     error: function (e) {
                         console.log(e)
+                        alert("error")
                     },
                 });
             }

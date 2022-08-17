@@ -3,7 +3,10 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use App\Models\AnggotaKelas;
+use App\Models\Pengajar;
+use App\Models\Kelas;
 use App\Models\Semester;
 class GuruController extends Controller
 {
@@ -14,8 +17,14 @@ class GuruController extends Controller
      */
     public function index()
     {
+        $id = Auth::user()->id;
+        $role = Auth::user()->role;
         $semester_aktif = Semester::where('status', '1')->first();
-        $siswa = AnggotaKelas::where('id_semester', $semester_aktif->id)->count();
+        $pengajar = Pengajar::where([['id_semester', $semester_aktif->id],
+        ['id_user', $id]])->first();
+        $kelas = Kelas::where('id', $pengajar->id_kelas)->first();
+        $siswa = AnggotaKelas::where([['id_semester', $semester_aktif->id],
+        ['id_kelas', $pengajar->id_kelas]])->count();
         $kelasA = AnggotaKelas::where([
             ['id_semester', '=', $semester_aktif->id],
             ['id_kelas', '=', '1']
@@ -33,6 +42,8 @@ class GuruController extends Controller
             ['id_kelas', 4]
         ])->count();
         return view('content.home', compact(
+            'role',
+            'kelas',
             'siswa',
             'kelasA',
             'kelasB',

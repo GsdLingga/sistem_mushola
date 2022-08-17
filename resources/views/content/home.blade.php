@@ -1,9 +1,9 @@
 @extends('layouts.app2')
 
 @section('title', 'Home')
-    
+
 @push('css')
-    
+
 @endpush
 
 @section('content')
@@ -27,6 +27,28 @@
 
 
     <div class="row">
+        @if (auth()->user()->role == 'Guru')
+        <div class="col-xl-12">
+            <div class="row">
+                <div class="col-md-4">
+                    <div class="card">
+                        <div class="card-body">
+                            <div class="media">
+                                <div class="media-body overflow-hidden">
+                                    <p class="text-truncate font-size-14 mb-2">Total Siswa Kelas {{ Str::ucfirst($kelas->nama_kelas) }}</p>
+                                    <h4 class="mb-0">{{$siswa}}</h4>
+                                </div>
+                                <div class="text-primary">
+                                    <i class="ri-user-fill font-size-24"></i>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- end row -->
+        </div>
+        @else
         <div class="col-xl-12">
             <div class="row">
                 <div class="col-md-4">
@@ -82,41 +104,47 @@
                 </div>
             </div>
         </div>
+        @endif
+
     </div>
-    <!-- end row -->  
+    <!-- end row -->
 @endsection
 
 @push('js')
     <script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
 
     <script>
-        let kelasA = {!! json_encode($kelasA) !!}
-        let kelasB = {!! json_encode($kelasB) !!}
-        let kelasC = {!! json_encode($kelasC) !!}
-        let kelasD = {!! json_encode($kelasD) !!}
+        const Auth = "{{$role}}"
+        if (Auth === "Admin" || Auth === "Pengurus") {
 
-        console.log(kelasA);
-        var options = {
-            series: [kelasA, kelasB, kelasC, kelasD],
-            chart: {
-            width: 380,
-            type: 'pie',
-            },
-            labels: ['Kelas A', 'Kelas B', 'Kelas C', 'Kelas D'],
-            responsive: [{
-                breakpoint: 480,
-                options: {
-                    chart: {
-                    width: 200
-                    },
-                    legend: {
-                    position: 'bottom'
+            let kelasA = {!! json_encode($kelasA) !!}
+            let kelasB = {!! json_encode($kelasB) !!}
+            let kelasC = {!! json_encode($kelasC) !!}
+            let kelasD = {!! json_encode($kelasD) !!}
+
+            console.log(kelasA);
+            var options = {
+                series: [kelasA, kelasB, kelasC, kelasD],
+                chart: {
+                width: 380,
+                type: 'pie',
+                },
+                labels: ['Kelas A', 'Kelas B', 'Kelas C', 'Kelas D'],
+                responsive: [{
+                    breakpoint: 480,
+                    options: {
+                        chart: {
+                        width: 200
+                        },
+                        legend: {
+                        position: 'bottom'
+                        }
                     }
-                }
-            }]
-        };
+                }]
+            };
 
-        var chart = new ApexCharts(document.querySelector("#pie-chart"), options);
-        chart.render();
+            var chart = new ApexCharts(document.querySelector("#pie-chart"), options);
+            chart.render();
+        }
     </script>
 @endpush
