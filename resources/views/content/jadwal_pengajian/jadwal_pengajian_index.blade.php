@@ -28,7 +28,7 @@
 
             </div>
             @if ($errors->any())
-                <div class="alert alert-dange alert-dismissible fade showr" role="alert">
+                <div class="alert alert-danger alert-dismissible fade show" role="alert">
                     @foreach ($errors->all() as $error)
                     <i class="mdi mdi-block-helper mr-2"></i>
                     {{ $error }}
@@ -72,7 +72,7 @@
     <script src="{{asset('assets/libs/datatables.net-buttons/js/buttons.html5.min.js')}}"></script>
     <script src="{{asset('assets/libs/datatables.net-buttons/js/buttons.print.min.js')}}"></script>
     <script src="{{asset('assets/libs/datatables.net-buttons/js/buttons.colVis.min.js')}}"></script>
-    
+
     <script src="{{asset('assets/libs/datatables.net-keytable/js/dataTables.keyTable.min.js')}}"></script>
     <script src="{{asset('assets/libs/datatables.net-select/js/dataTables.select.min.js')}}"></script>
 
@@ -85,26 +85,26 @@
     <script src="{{asset('assets/libs/fullcalendar/fullcalendar.min.js')}}"></script>
 
     <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-    
+
     <!-- Calendar init -->
     {{-- <script src="{{asset('assets/js/pages/calendar.init.js')}}"></script> --}}
     {{-- <script src="https://cdnjs.cloudflare.com/ajax/libs/fullcalendar/3.9.0/fullcalendar.js"></script> --}}
 
     <script>
     $(document).ready(function () {
-           
+
         // var SITEURL = "{{ url('/') }}";
 
         //get jadwal_pengajian value from controller
         var jadwal= {!! json_encode($jadwal_pengajian) !!};
         // console.log(jadwal);
-          
+
         $.ajaxSetup({
             headers: {
             'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
             }
         });
-          
+
         var calendar = $('#calendar').fullCalendar({
             header:{
                 left:"prev,next today",
@@ -161,12 +161,12 @@
             }
 
         });
-        
+
     });
-         
+
     function displayMessage(message) {
         toastr.success(message, 'Event');
-    } 
-        
+    }
+
 </script>
 @endpush

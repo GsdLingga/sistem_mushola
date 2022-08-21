@@ -41,4 +41,22 @@ class SiswaOptionsController extends Controller
         ->get();
         return response()->json($siswa);
     }
+
+    // public function getNilaiCreate(Request $request) {
+    //     // return response()->json($request->all());
+    //     try {
+    //         $semesterActive = Semester::where('status','1')->first();
+    //         $anggota_kelas = Nilai::select('id_siswa')->where([
+    //             ['id_semester', '=', $semesterActive->id],
+    //             ['id_kelas', '=', $request->kelasValue]
+    //             ])->get();
+
+    //         $siswa = Siswa::select('id', 'nama')
+    //         ->whereIn('id', $kelas)
+    //         ->get();
+    //         return response()->json($siswa);
+    //     } catch (\Throwable $th) {
+    //         return response()->json($th);
+    //     }
+    // }
 }

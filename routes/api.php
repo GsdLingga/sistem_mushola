@@ -18,6 +18,7 @@ use App\Http\Controllers\API\SiswaOptionsController;
 //Get Siswa List
 Route::get('/getSiswaOptions', [SiswaOptionsController::class,'getSiswaOptions']);
 Route::get('/getSiswaCreate', [SiswaOptionsController::class,'getSiswaCreate']);
+Route::get('/getNilaiCreate', [SiswaOptionsController::class,'getNilaiCreate']);
 
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();

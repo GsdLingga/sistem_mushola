@@ -25,7 +25,7 @@
 
             </div>
             @if ($errors->any())
-                <div class="alert alert-dange alert-dismissible fade showr" role="alert">
+                <div class="alert alert-danger alert-dismissible fade show" role="alert">
                     @foreach ($errors->all() as $error)
                     <i class="mdi mdi-block-helper mr-2"></i>
                     {{ $error }}
@@ -104,7 +104,7 @@
                             @endforeach
                         </tbody>
                     </table>
-                
+
                 </div> <!-- end card body-->
             </div> <!-- end card -->
         </div><!-- end col-->
@@ -121,7 +121,7 @@
     <script src="{{asset('assets/libs/datatables.net-buttons/js/buttons.html5.min.js')}}"></script>
     <script src="{{asset('assets/libs/datatables.net-buttons/js/buttons.print.min.js')}}"></script>
     <script src="{{asset('assets/libs/datatables.net-buttons/js/buttons.colVis.min.js')}}"></script>
-    
+
     <script src="{{asset('assets/libs/datatables.net-keytable/js/dataTables.keyTable.min.js')}}"></script>
     <script src="{{asset('assets/libs/datatables.net-select/js/dataTables.select.min.js')}}"></script>
 

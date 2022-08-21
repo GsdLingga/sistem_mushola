@@ -1,5 +1,5 @@
 @extends('layouts.app2')
-@section('title', 'Kelola Raport')
+@section('title', 'Kelola Nilai')
 @push('css')
     <link href="{{asset('assets/libs/datatables.net-buttons-bs4/css/buttons.bootstrap4.min.css')}}" rel="stylesheet" type="text/css" />
     <link href="{{asset('assets/libs/datatables.net-select-bs4/css/select.bootstrap4.min.css')}}" rel="stylesheet" type="text/css" />
@@ -10,11 +10,11 @@
     <div class="row">
         <div class="col-12">
             <div class="page-title-box d-flex align-items-center justify-content-between">
-                <h4 class="mb-0">Raport</h4>
+                <h4 class="mb-0">Nilai</h4>
 
-                <a href="{{route('raport.create')}}" type="button" class="btn btn-primary waves-effect waves-light" style="color: white;">
+                {{-- <a href="{{route('nilai.create')}}" type="button" class="btn btn-primary waves-effect waves-light" style="color: white;">
                     <i class="mdi mdi-account-plus align-middle mr-2"></i> Tambah Nilai
-                </a>
+                </a> --}}
             </div>
             @if ($errors->any())
                 <div class="alert alert-danger alert-dismissible fade show" role="alert">
@@ -25,6 +25,15 @@
                         <span aria-hidden="true">&times;</span>
                     </button>
                     @endforeach
+                </div>
+            @endif
+            @if(session()->has('error'))
+                <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                    <i class="mdi mdi-block-helper mr-2"></i>
+                    {{ session()->get('error') }}
+                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
                 </div>
             @endif
             @if(session()->has('success'))
@@ -43,49 +52,84 @@
         <div class="col-12">
             <div class="card">
                 <div class="card-body">
+                    <form class="custom-validation" action="{{ route('nilai.create') }}" method="GET">
+                        {{-- @csrf --}}
+                        <div class="form-group" id="kelasDiv">
+                            <label class="control-label">Kelas</label>
+                            <select name="kelas" id="selectKelas" class="form-control select2" required>
+                                <option value="">Select</option>
+                                <optgroup label="Kelas">
+                                    @foreach ($kelas as $kls)
+                                        <option value="{{ $kls->id }}">{{ Str::ucfirst($kls->nama_kelas) }}</option>
+                                    @endforeach
+                                </optgroup>
+                            </select>
+                            @error('mata_pelajaran')
+                                <span class="invalid-feedback" role="alert">
+                                    <strong>{{ $message }}</strong>
+                                </span>
+                            @enderror
+                        </div>
+                        <div class="form-group" id="mataPelajaranDiv">
+                            <label class="control-label">Mata Pelajaran</label>
+                            <select name="mata_pelajaran" id="selectMataPelajaran" class="form-control select2" required>
+                                <option value="">Select</option>
+                                <optgroup label="Mata Pelajaran">
+                                    @foreach ($mata_pelajaran as $mapel)
+                                        <option value="{{ $mapel->id }}">{{ $mapel->nama_pelajaran }}</option>
+                                    @endforeach
+                                </optgroup>
+                            </select>
+                            @error('mata_pelajaran')
+                                <span class="invalid-feedback" role="alert">
+                                    <strong>{{ $message }}</strong>
+                                </span>
+                            @enderror
+                        </div>
+                        <div class="form-group mb-0">
+                            <div>
+                                <button type="submit" class="btn btn-primary waves-effect waves-light mr-1">
+                                    Tambah Nilai
+                                </button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-body">
                     <div class="float-right">
                         {{-- href="{{route('raport.pdf')}}"  --}}
                         <button type="button" class="btn btn-primary waves-effect waves-light btn-sm" style="color: white;" data-toggle="modal" data-target="#exampleModal">
                             <i class="mdi mdi-account-plus align-middle mr-2"></i> Cetak Raport
                         </button>
                     </div>
-
                     <h4 class="card-title mb-4">Daftar Nilai Siswa</h4>
-                    {{-- <p class="card-title-desc">
-                        This example shows the multi option. Note how a click on a row will toggle its selected state without effecting other rows,
-                        unlike the os and single options shown in other examples.
-                    </p> --}}
-
                     <table id="datatable" class="table table-bordered dt-responsive nowrap" style="border-collapse: collapse; border-spacing: 0; width: 100%;">
                         <thead>
                             <tr>
                                 <th>No</th>
                                 <th>Nama</th>
-                                <th>Al'qur'an</th>
-                                <th>Iqro'</th>
-                                <th>Aqidah Akhlak</th>
-                                <th>Hafalan Surat</th>
-                                <th>PAI</th>
-                                <th>Tajwid</th>
-                                <th>Khot</th>
+                                <th>Mata Pelajaran</th>
+                                <th>Nilai</th>
                                 <th>Action</th>
                             </tr>
                         </thead>
                         <tbody>
-                            @foreach ($raport as $raports)
+                            @foreach ($nilai as $nilais)
                                 <tr>
                                     <td>{{ $loop->iteration }}</td>
-                                    <td>{{ $raports->nama }}</td>
-                                    <td>{{ $raports->alquran }}</td>
-                                    <td>{{ $raports->iqro  }}</td>
-                                    <td>{{ $raports->aqidah_akhlak }}</td>
-                                    <td>{{ $raports->hafalan_surat }}</td>
-                                    <td>{{ $raports->pai }}</td>
-                                    <td>{{ $raports->tajwid }}</td>
-                                    <td>{{ $raports->khot }}</td>
+                                    <td>{{ $nilais->nama }}</td>
+                                    <td>{{ $nilais->nama_pelajaran }}</td>
+                                    <td>{{ $nilais->nilai  }}</td>
                                     <td>
-                                        <a href="{{route('raport.edit', $raports->id)}}" class="mr-3 text-primary" data-toggle="tooltip" data-placement="top" title="" data-original-title="Edit"><i class="mdi mdi-pencil font-size-18"></i></a>
-                                        <form action="{{route('raport.destroy', $raports->id)}}" method="POST" style="display: contents;">
+                                        <a href="{{route('nilai.edit', $nilais->id)}}" class="mr-3 text-primary" data-toggle="tooltip" data-placement="top" title="" data-original-title="Edit"><i class="mdi mdi-pencil font-size-18"></i></a>
+                                        <form action="{{route('nilai.destroy', $nilais->id)}}" method="POST" style="display: contents;">
                                             @method('DELETE')
                                             @csrf
                                             <button class="text-danger" style="background-color: transparent; border: 0;" data-toggle="tooltip" data-placement="top" title="" data-original-title="Delete"><i class="mdi mdi-trash-can font-size-18"></i></button>
@@ -112,7 +156,7 @@
               </button>
             </div>
             <div class="modal-body">
-              <form action="{{ route('raport.pdf') }}" method="POST">
+              <form action="{{ route('nilai.pdf') }}" method="POST">
                 @csrf
                 <div class="form-group">
                     <label for="exampleFormControlSelect1">Semester</label>

@@ -23,13 +23,6 @@
                             <span>User</span>
                         </a>
                     </li>
-
-                    {{-- <li>
-                        <a href="javascript: void(0);" class=" waves-effect">
-                            <i class="ri-folder-3-line"></i>
-                            <span>Laporan</span>
-                        </a>
-                    </li> --}}
                 @elseif (auth()->user()->role == 'Pengurus')
                     <li>
                         <a href="{{route('pengurus.dashboard')}}" class="waves-effect">
@@ -56,30 +49,11 @@
                         <ul class="sub-menu" aria-expanded="false">
                             <li><a href="{{route('siswa.index')}}">Daftar Siswa</a></li>
                             <li><a href="{{route('anggota_kelas.index')}}">Daftar Kelas</a></li>
-                            <li><a href="{{route('raport.index')}}">Raport</a></li>
+                            {{-- <li><a href="{{route('raport.index')}}">Raport</a></li> --}}
+                            <li><a href="{{route('nilai.index')}}">Nilai</a></li>
                             <li><a href="{{route('absensi.index')}}">Absen</a></li>
                         </ul>
                     </li>
-                    {{-- <li>
-                        <a href="calendar.html" class=" waves-effect">
-                            <i class="ri-file-list-2-line"></i>
-                            <span>Nilai</span>
-                        </a>
-                    </li>
-
-                    <li>
-                        <a href="calendar.html" class=" waves-effect">
-                            <i class="ri-book-line"></i>
-                            <span>Rapot</span>
-                        </a>
-                    </li>
-
-                    <li>
-                        <a href="calendar.html" class=" waves-effect">
-                            <i class="ri-file-paper-2-line"></i>
-                            <span>Absen</span>
-                        </a>
-                    </li>     --}}
                 @endif
                 @if (auth()->user()->role == 'Admin' || auth()->user()->role == 'Pengurus')
                     <li>
