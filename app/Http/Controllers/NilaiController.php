@@ -3,7 +3,9 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use App\Models\Raport;
+use App\Models\Pengajar;
 use App\Models\Siswa;
 use App\Models\MataPelajaran;
 use App\Models\Nilai;
@@ -23,24 +25,44 @@ class NilaiController extends Controller
      */
     public function index()
     {
+        $role = Auth::user()->role;
+
+        // return $role;
+
         $siswa = Siswa::select('id','nama')->get();
         $semester_active = Semester::select('id','tahun_ajaran')
         ->where('status',"1")->first();
         $mata_pelajaran = MataPelajaran::get();
 
-        $nilai = DB::table('nilai')
-        ->join('anggota_kelas','anggota_kelas.id', '=', 'nilai.id_anggota_kelas')
-        ->join('siswa','siswa.id', '=', 'anggota_kelas.id_siswa')
-        ->join('kelas','kelas.id','=','anggota_kelas.id_siswa')
-        ->join('mata_pelajaran', 'mata_pelajaran.id', '=', 'nilai.id_mata_pelajaran')
-        ->where('anggota_kelas.id_semester', $semester_active->id)
-        // ->select('raport.*','siswa.nama')
-        ->get();
+        if ($role == 'Guru') {
+            $id = Auth::user()->id;
+            $pengajar = Pengajar::where([['id_user',$id],['id_semester',$semester_active->id]])->first();
+            // return $semester_active;
+            $nilai = DB::table('nilai')
+            ->join('anggota_kelas','anggota_kelas.id', '=', 'nilai.id_anggota_kelas')
+            ->join('siswa','siswa.id', '=', 'anggota_kelas.id_siswa')
+            ->join('kelas','kelas.id','=','anggota_kelas.id_siswa')
+            ->join('mata_pelajaran', 'mata_pelajaran.id', '=', 'nilai.id_mata_pelajaran')
+            ->where([['anggota_kelas.id_semester', $semester_active->id], ['kelas.id', $pengajar->id_kelas]])
+            ->get();
+            // return $nilai;
+        }else {
+            $nilai = DB::table('nilai')
+            ->join('anggota_kelas','anggota_kelas.id', '=', 'nilai.id_anggota_kelas')
+            ->join('siswa','siswa.id', '=', 'anggota_kelas.id_siswa')
+            ->join('kelas','kelas.id','=','anggota_kelas.id_siswa')
+            ->join('mata_pelajaran', 'mata_pelajaran.id', '=', 'nilai.id_mata_pelajaran')
+            ->where('anggota_kelas.id_semester', $semester_active->id)
+            // ->select('raport.*','siswa.nama')
+            ->get();
+        }
 
         // return $mata_pelajaran;
 
         $semester = Semester::select('id','tahun_ajaran')->get();
         $kelas = Kelas::select('id', 'nama_kelas')->get();
+
+        // return $nilai;
 
         return view('content.nilai.nilai_index', compact(
             'nilai',
@@ -69,9 +91,24 @@ class NilaiController extends Controller
 
         // $this->validate($request, $rules, $customMessages);
 
-        $kelas = Kelas::select('id','nama_kelas')
-        ->where('id',$request->kelas)
-        ->first();
+        $role = Auth::user()->role;
+
+        // return $id;
+
+        if ($role == 'Guru') {
+            $id = Auth::user()->id;
+            $semester_active = Semester::select('id','tahun_ajaran')
+                            ->where('status',"1")->first();
+            $pengajar = Pengajar::where([['id_user',$id],['id_semester',$semester_active->id]])->first();
+            // return $semester_active;
+            $kelas = Kelas::select('id','nama_kelas')
+            ->where('id',$pengajar->id_kelas)
+            ->first();
+        }else {
+            $kelas = Kelas::select('id','nama_kelas')
+            ->where('id',$request->kelas)
+            ->first();
+        }
 
         $mata_pelajaran = MataPelajaran::select('id','nama_pelajaran')
         ->where('id',$request->mata_pelajaran)

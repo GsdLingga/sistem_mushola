@@ -54,22 +54,24 @@
                 <div class="card-body">
                     <form class="custom-validation" action="{{ route('nilai.create') }}" method="GET">
                         {{-- @csrf --}}
-                        <div class="form-group" id="kelasDiv">
-                            <label class="control-label">Kelas</label>
-                            <select name="kelas" id="selectKelas" class="form-control select2" required>
-                                <option value="">Select</option>
-                                <optgroup label="Kelas">
-                                    @foreach ($kelas as $kls)
-                                        <option value="{{ $kls->id }}">{{ Str::ucfirst($kls->nama_kelas) }}</option>
-                                    @endforeach
-                                </optgroup>
-                            </select>
-                            @error('mata_pelajaran')
-                                <span class="invalid-feedback" role="alert">
-                                    <strong>{{ $message }}</strong>
-                                </span>
-                            @enderror
-                        </div>
+                        @if (auth()->user()->role == 'Admin' || auth()->user()->role == 'Pengurus')
+                            <div class="form-group" id="kelasDiv">
+                                <label class="control-label">Kelas</label>
+                                <select name="kelas" id="selectKelas" class="form-control select2" required>
+                                    <option value="">Select</option>
+                                    <optgroup label="Kelas">
+                                        @foreach ($kelas as $kls)
+                                            <option value="{{ $kls->id }}">{{ Str::ucfirst($kls->nama_kelas) }}</option>
+                                        @endforeach
+                                    </optgroup>
+                                </select>
+                                @error('mata_pelajaran')
+                                    <span class="invalid-feedback" role="alert">
+                                        <strong>{{ $message }}</strong>
+                                    </span>
+                                @enderror
+                            </div>
+                        @endif
                         <div class="form-group" id="mataPelajaranDiv">
                             <label class="control-label">Mata Pelajaran</label>
                             <select name="mata_pelajaran" id="selectMataPelajaran" class="form-control select2" required>
@@ -115,6 +117,7 @@
                             <tr>
                                 <th>No</th>
                                 <th>Nama</th>
+                                <th>Kelas</th>
                                 <th>Mata Pelajaran</th>
                                 <th>Nilai</th>
                                 <th>Action</th>
@@ -125,6 +128,7 @@
                                 <tr>
                                     <td>{{ $loop->iteration }}</td>
                                     <td>{{ $nilais->nama }}</td>
+                                    <td>{{ Str::ucfirst($nilais->nama_kelas) }}</td>
                                     <td>{{ $nilais->nama_pelajaran }}</td>
                                     <td>{{ $nilais->nilai  }}</td>
                                     <td>
