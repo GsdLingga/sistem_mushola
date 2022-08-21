@@ -55,7 +55,7 @@ Route::middleware('is_adminpengurus')->group(function () {
 Route::middleware('is_adminguru')->group(function () {
     Route::resource('siswa', SiswaController::class);
     Route::resource('absensi', AbsensiController::class);
-    Route::resource('anggota_kelas', AnggotaKelasController::class);
+    // Route::resource('anggota_kelas', AnggotaKelasController::class);
     // Route::resource('raport', RaportController::class);
     Route::resource('nilai', NilaiController::class);
     Route::post('create-pdf-file', [NilaiController::class, 'createPDF'])->name('nilai.pdf');

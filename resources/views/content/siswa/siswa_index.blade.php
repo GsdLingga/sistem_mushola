@@ -60,7 +60,7 @@
                                 <th>No</th>
                                 <th>Nama</th>
                                 <th>No Induk</th>
-                                {{-- <th>Kelas</th> --}}
+                                <th>Kelas</th>
                                 <th>Jenis Kelamin</th>
                                 <th>Alamat</th>
                                 <th>Telepon</th>
@@ -73,7 +73,7 @@
                                     <td>{{ $loop->iteration }}</td>
                                     <td>{{ $siswas->nama }}</td>
                                     <td>{{ $siswas->no_induk }}</td>
-                                    {{-- <td>{{ Str::ucfirst($siswas->kelas) }}</td> --}}
+                                    <td>{{ Str::ucfirst($siswas->nama_kelas) }}</td>
                                     <td>{{ Str::ucfirst($siswas->jenis_kelamin)  }}</td>
                                     <td>{{ $siswas->alamat }}</td>
                                     <td>{{ $siswas->telepon }}</td>

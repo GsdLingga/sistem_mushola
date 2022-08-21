@@ -48,7 +48,7 @@
                         </a>
                         <ul class="sub-menu" aria-expanded="false">
                             <li><a href="{{route('siswa.index')}}">Daftar Siswa</a></li>
-                            <li><a href="{{route('anggota_kelas.index')}}">Daftar Kelas</a></li>
+                            {{-- <li><a href="{{route('anggota_kelas.index')}}">Daftar Kelas</a></li> --}}
                             {{-- <li><a href="{{route('raport.index')}}">Raport</a></li> --}}
                             <li><a href="{{route('nilai.index')}}">Nilai</a></li>
                             <li><a href="{{route('absensi.index')}}">Absen</a></li>

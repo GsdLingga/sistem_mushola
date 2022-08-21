@@ -3,8 +3,12 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\Models\Kelas;
 use App\Models\Siswa;
+use App\Models\Semester;
+use App\Models\AnggotaKelas;
 use Carbon\Carbon;
+use DB;
 
 class SiswaController extends Controller
 {
@@ -13,11 +17,23 @@ class SiswaController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
+
+    public function getNextId(){
+
+        $statement = DB::select("show table status like 'siswa'");
+        return $statement[0]->Auto_increment;
+    }
+
     public function index()
     {
         Carbon::setLocale('id');
 
-        $siswa = Siswa::where('status','=','1')->get();
+        $siswa = Siswa::select('siswa.id as id','siswa.nama','siswa.no_induk','kelas.nama_kelas','siswa.jenis_kelamin','siswa.alamat','siswa.telepon')
+        ->join('anggota_kelas','anggota_kelas.id_siswa','=','siswa.id')
+        ->join('kelas','kelas.id','=','anggota_kelas.id_kelas')
+        ->where('siswa.status','=','1')->get();
+
+        // return $siswa;
 
         return view('content.siswa.siswa_index', compact(
             'siswa'
@@ -32,7 +48,9 @@ class SiswaController extends Controller
      */
     public function create()
     {
-        return view('content.siswa.siswa_create');
+        $kelas = Kelas::get();
+        // return $kelas;
+        return view('content.siswa.siswa_create', compact('kelas'));
     }
 
     /**
@@ -47,26 +65,41 @@ class SiswaController extends Controller
             'name' => ['required', 'string', 'max:255'],
             'no_induk' => ['required', 'string', 'numeric'],
             'tgl_lahir' => ['required', 'date'],
-            // 'kelas' => ['required', 'string'],
+            'kelas' => ['required', 'string'],
             'jenis_kelamin' => ['required', 'string'],
             'alamat' => ['required', 'string', 'max:255'],
             'telepon' => ['required', 'string', 'numeric', 'digits_between:10,13'],
         ]);
 
+        try {
+            $get_id = $this->getNextId();
 
-        $siswa  = Siswa::create([
-            'nama'          => $request->name,
-            'no_induk'      => $request->no_induk,
-            'tgl_lahir'     => $request->tgl_lahir,
-            // 'kelas'         => $request->kelas,
-            'jenis_kelamin' => $request->jenis_kelamin,
-            'alamat'        => $request->alamat,
-            'telepon'       => $request->telepon,
-            'status'        => 1,
-            // 'slug'      => Str::slug($request->name),
-        ]);
+            $semester_active = Semester::select('id','tahun_ajaran')
+            ->where('status',"1")->first();
 
-        return redirect()->route('siswa.index')->with('success', 'Siswa Created Successfully');
+            $siswa = Siswa::create([
+                'nama'          => $request->name,
+                'no_induk'      => $request->no_induk,
+                'tgl_lahir'     => $request->tgl_lahir,
+                'jenis_kelamin' => $request->jenis_kelamin,
+                'alamat'        => $request->alamat,
+                'telepon'       => $request->telepon,
+                'status'        => 1,
+                // 'slug'      => Str::slug($request->name),
+            ]);
+
+            $anggota_kelas = AnggotaKelas::create([
+                'id_kelas'      => $request->kelas,
+                'id_siswa'      => $get_id,
+                'id_semester'   => $semester_active->id,
+                'status'        => 1,
+                // 'slug'      => Str::slug($request->name),
+            ]);
+
+            return redirect()->route('siswa.index')->with('success', 'Siswa Created Successfully');
+        } catch (Exception $e) {
+            return redirect()->back()->with('error', $e);
+        }
 
     }
 
@@ -89,9 +122,15 @@ class SiswaController extends Controller
      */
     public function edit($id)
     {
-        $siswa = Siswa::where('id','=',$id)->first();
+        $siswa = Siswa::join('anggota_kelas','anggota_kelas.id_siswa','=','siswa.id')
+        ->where('siswa.id','=',$id)->first();
+
+        $kelas = Kelas::get();
+
+        // return $siswa;
         return view('content.siswa.siswa_edit', compact(
-            'siswa'
+            'siswa',
+            'kelas',
         ));
         // return $siswa;
     }
@@ -105,26 +144,41 @@ class SiswaController extends Controller
      */
     public function update(Request $request, $id)
     {
+        // return $request->all();
         $siswa = $request->validate([
             'name' => ['required', 'string', 'max:255'],
             'no_induk' => ['required', 'string', 'numeric'],
             'tgl_lahir' => ['required', 'date'],
+            'kelas' => ['required', 'string'],
             'jenis_kelamin' => ['required', 'string'],
             'alamat' => ['required', 'string', 'max:255'],
             'telepon' => ['required', 'string', 'numeric', 'digits_between:10,13'],
         ]);
 
-        $siswa = Siswa::find($id);
-        $siswa->nama            = $request->name;
-        $siswa->no_induk        = $request->no_induk;
-        $siswa->tgl_lahir       = $request->tgl_lahir;
-        $siswa->kelas           = $request->kelas;
-        $siswa->jenis_kelamin   = $request->jenis_kelamin;
-        $siswa->alamat          = $request->alamat;
-        $siswa->telepon         = $request->telepon;
-        $siswa->save();
+        try {
+            $semester_active = Semester::select('id','tahun_ajaran')
+            ->where('status',"1")->first();
+            $id_anggota_kelas = AnggotaKelas::where([['id_semester',$semester_active->id],['id_siswa',$id]])->first();
 
-        return redirect()->route('siswa.index')->with('success', 'Siswa Edit Successfully');
+            $siswa = Siswa::find($id);
+            $siswa->nama            = $request->name;
+            $siswa->no_induk        = $request->no_induk;
+            $siswa->tgl_lahir       = $request->tgl_lahir;
+            $siswa->jenis_kelamin   = $request->jenis_kelamin;
+            $siswa->alamat          = $request->alamat;
+            $siswa->telepon         = $request->telepon;
+            $siswa->save();
+
+            $anggota_kelas = AnggotaKelas::find($id_anggota_kelas->id);
+            $anggota_kelas->id_kelas = $request->kelas;
+            $anggota_kelas->save();
+
+            return redirect()->route('siswa.index')->with('success', 'Siswa Edit Successfully');
+        } catch (Exception $e) {
+            return redirect()->back()->with('error', $e);
+        }
+
+
     }
 
     /**

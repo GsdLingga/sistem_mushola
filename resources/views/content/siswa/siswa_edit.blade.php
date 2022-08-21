@@ -88,15 +88,14 @@
                                 @enderror
                             </div><!-- input-group -->
                         </div>
-                        {{-- <div class="form-group">
+                        <div class="form-group">
                             <label class="control-label">Kelas</label>
                             <select name="kelas" id="kelas" value="{{ $siswa->kelas }}" class="form-control select2" required>
                                 <option>Select</option>
                                 <optgroup label="Jenis Kelas">
-                                    <option <?php if($siswa->kelas == "a") echo "selected=\"selected\""; ?> value="a">A</option>
-                                    <option <?php if($siswa->kelas == "b") echo "selected=\"selected\""; ?> value="b">B</option>
-                                    <option <?php if($siswa->kelas == "c") echo "selected=\"selected\""; ?> value="c">C</option>
-                                    <option <?php if($siswa->kelas == "d") echo "selected=\"selected\""; ?> value="d">D</option>
+                                    @foreach ($kelas as $kls)
+                                    <option <?php if($siswa->id_kelas == $kls->id) echo "selected=\"selected\""; ?> value="{{$kls->id}}">{{Str::ucfirst($kls->nama_kelas)}}</option>
+                                    @endforeach
                                 </optgroup>
                             </select>
                             @error('kelas')
@@ -104,7 +103,7 @@
                                     <strong>{{ $message }}</strong>
                                 </span>
                             @enderror
-                        </div> --}}
+                        </div>
                         <div class="form-group">
                             <label class="control-label">Jenis Kelamin</label>
                             <select name="jenis_kelamin" id="jenis_kelamin" value="{{ $siswa->jenis_kelamin }}" class="form-control select2" required>

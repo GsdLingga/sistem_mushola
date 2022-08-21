@@ -87,15 +87,14 @@
                                 @enderror
                             </div><!-- input-group -->
                         </div>
-                        {{-- <div class="form-group">
+                        <div class="form-group">
                             <label class="control-label">Kelas</label>
                             <select name="kelas" id="kelas" class="form-control select2" required>
                                 <option>Select</option>
                                 <optgroup label="Jenis Kelas">
-                                    <option value="a">A</option>
-                                    <option value="b">B</option>
-                                    <option value="c">C</option>
-                                    <option value="d">D</option>
+                                    @foreach ($kelas as $kls)
+                                        <option value="{{$kls->id}}">{{Str::ucfirst($kls->nama_kelas)}}</option>
+                                    @endforeach
                                 </optgroup>
                             </select>
                             @error('kelas')
@@ -103,7 +102,7 @@
                                     <strong>{{ $message }}</strong>
                                 </span>
                             @enderror
-                        </div> --}}
+                        </div>
                         <div class="form-group">
                             <label class="control-label">Jenis Kelamin</label>
                             <select name="jenis_kelamin" id="jenis_kelamin" class="form-control select2" required>
