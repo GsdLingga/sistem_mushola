@@ -4,6 +4,11 @@
     <link href="{{asset('assets/libs/datatables.net-buttons-bs4/css/buttons.bootstrap4.min.css')}}" rel="stylesheet" type="text/css" />
     <link href="{{asset('assets/libs/datatables.net-select-bs4/css/select.bootstrap4.min.css')}}" rel="stylesheet" type="text/css" />
 
+    <style>
+        .modal-dialog{
+        max-width: 650px;
+    }
+    </style>
 @endpush
 @section('content')
     <!-- start page title -->
@@ -164,32 +169,100 @@
                 @csrf
                 <div class="form-group">
                     <label for="exampleFormControlSelect1">Semester</label>
-                    <select class="form-control" id="selectSemester">
+                    <select name="semester" class="form-control" id="selectSemester">
                         <option value="">Pilih Semester</option>
                         @foreach ($semester as $sem)
                             <option value={{$sem->id}}>{{$sem->tahun_ajaran}}</option>
                         @endforeach
+                        @error('semester')
+                            <span class="invalid-feedback" role="alert">
+                                <strong>{{ $message }}</strong>
+                            </span>
+                        @enderror
                     </select>
                 </div>
-                <div class="form-group" id="kelasDiv" style="display: none">
+                <div class="form-group" id="kelasDiv">
                     <label for="exampleFormControlSelect1">Kelas</label>
-                    <select class="form-control" id="selectKelas">
+                    <select name="kelas" class="form-control" id="selectKelasDialog">
                         <option value="">Pilih Kelas</option>
                         @foreach ($kelas as $kls)
                             <option value={{$kls->id}}>{{ucfirst(trans($kls->nama_kelas))}}</option>
                         @endforeach
+                        @error('kelas')
+                            <span class="invalid-feedback" role="alert">
+                                <strong>{{ $message }}</strong>
+                            </span>
+                        @enderror
                     </select>
                 </div>
-                <div class="form-group" id="siswaDiv" style="display: none">
+                <div class="form-group" id="siswaDiv">
                     <label for="exampleFormControlSelect1">Nama Siswa</label>
-                    <select class="form-control" id="selectSiswa">
+                    <select name="siswa" class="form-control" id="selectSiswa">
                         {{-- <option value="">Pilih Siswa</option> --}}
                         {{-- @foreach ($siswa as $sis)
                             <option value={{$sis->id}}>{{$sis->nama}}</option>
                         @endforeach --}}
+                        @error('siswa')
+                            <span class="invalid-feedback" role="alert">
+                                <strong>{{ $message }}</strong>
+                            </span>
+                        @enderror
                     </select>
                 </div>
-                <div class="modal-footer" id="btnDiv" style="display: none">
+                <div class="form-group">
+                    <label>Spiritual</label>
+                    <div class="row">
+                        <div class="col-4">
+                            <input name="spiritual" id="spiritual" type="text" class="form-control" required placeholder="Enter spiritual"/>
+                            @error('spiritual')
+                                <span class="invalid-feedback" role="alert">
+                                    <strong>{{ $message }}</strong>
+                                </span>
+                            @enderror
+                        </div>
+                        <div class="col-8">
+                            <input name="spiritual_value" id="spiritual_value" type="text" class="form-control" required placeholder="Enter spiritual value"/>
+                            @error('spiritual_value')
+                                <span class="invalid-feedback" role="alert">
+                                    <strong>{{ $message }}</strong>
+                                </span>
+                            @enderror
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label>Sosial</label>
+                    <div class="row">
+                        <div class="col-4">
+                            <input name="sosial" id="sosial" type="text" class="form-control" required placeholder="Enter sosial"/>
+                            @error('sosial')
+                                <span class="invalid-feedback" role="alert">
+                                    <strong>{{ $message }}</strong>
+                                </span>
+                            @enderror
+                        </div>
+                        <div class="col-8">
+                            <input name="sosial_value" id="sosial_value" type="text" class="form-control" required placeholder="Enter sosial value"/>
+                            @error('sosial_value')
+                                <span class="invalid-feedback" role="alert">
+                                    <strong>{{ $message }}</strong>
+                                </span>
+                            @enderror
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label>Catatan</label>
+                    <div>
+                        <input name="catatan" id="catatan" type="text" class="form-control" required placeholder="Enter catatan"/>
+                        @error('catatan')
+                            <span class="invalid-feedback" role="alert">
+                                <strong>{{ $message }}</strong>
+                            </span>
+                        @enderror
+                    </div>
+                </div>
+                <div class="modal-footer" id="btnDiv">
                     {{-- <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button> --}}
                   <button id="btnSubmit" type="submit" class="btn btn-primary" style="float: right;">Submit</button>
                 </div>
@@ -223,23 +296,21 @@
         })
     </script>
     <script>
-        // let semester = document.getElementById('selectSemester').value;
         let semester = document.getElementById('selectSemester');
-        let kelas = document.getElementById('selectKelas');
+        let kelas = document.getElementById('selectKelasDialog');
         let siswa = document.getElementById('selectSiswa');
         let kelasDiv = document.getElementById('kelasDiv')
         let siswaDiv = document.getElementById('siswaDiv')
         let btnDiv = document.getElementById('btnDiv')
+        let spiritual = document.getElementById('spiritual')
+        let sosial = document.getElementById('sosial')
+        let catatan = document.getElementById('catatan')
 
-        $('#selectSemester').change(function(){
-            // let semesterOption = semester.options[semester.selectedIndex].text
-            kelasDiv.style.display = "block";
-        })
-
-        $('#selectKelas').change(function(){
+        $('#selectKelasDialog, #selectSemester').change(function(){
             let semesterValue = semester.value;
             let kelasValue = kelas.value;
-            // console.log(prefectureOption);
+            // console.log(semesterValue)
+            // console.log(kelasValue)
             $.ajax({
                 type: "GET",
                 url: "api/getSiswaOptions",
@@ -255,38 +326,32 @@
                         $('#selectSiswa').append($('<option>', {value: response[index].id, text: response[index].nama}));
                     }
                 },
-                error: function () {
-                    alert("error");
+                error: function (e) {
+                    console.log(e);
                 },
             });
-            siswaDiv.style.display = "block";
-        })
-
-        $('#selectSiswa').change(function(){
-            btnDiv.style.display = "block";
         })
 
         $('#btnSubmit').click(function(){
-            if (semester.value === "" || kelas.value === "" || siswa.value === "") {
+            if (semester.value === "" || kelas.value === "" || siswa.value === "" || spiritual.value === "" || sosial.value === "" || catatan.value === "") {
                 alert("There is an empty input")
             }else{
                 let semesterValue = semester.value
                 let kelasValue = kelas.value
                 let siswaValue = siswa.value
+                let spiritualValue = spiritual.value
+                let sosialValue = sosial.value
+                let catatanValue = catatan.value
                 $.ajax({
                     type: "POST",
                     url: "/create-pdf-file",
                     data: { "_token": "{{ csrf_token() }}",
-                    semesterValue, kelasValue, siswaValue },
+                    semesterValue, kelasValue, siswaValue, spiritualValue, sosialValue, catatanValue },
                     success: function (response) {
                         console.log(response)
-                    // prefectureOption.value = response[1].id;
-                    // city.value = response[0].city;
-                    // local.value = response[0].local;
                     },
                     error: function (e) {
                         console.log(e)
-                        alert("error")
                     },
                 });
             }

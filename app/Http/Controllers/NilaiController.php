@@ -14,6 +14,7 @@ use App\Models\Kelas;
 use App\Models\Absensi;
 use App\Models\AnggotaKelas;
 use PDF;
+use \stdClass;
 use Illuminate\Support\Facades\DB;
 
 class NilaiController extends Controller
@@ -273,26 +274,26 @@ class NilaiController extends Controller
 
     public function createPDF(Request $request)
     {
-        $get_anggota_kelas = AnggotaKelas::where("id_kelas", $request->kelasValue)
-                                            ->where("id_semester", $request->semesterValue)
-                                            ->where("id_siswa", $request->siswaValue)
+        $get_anggota_kelas = AnggotaKelas::where("id_kelas", $request->kelas)
+                                            ->where("id_semester", $request->semester)
+                                            ->where("id_siswa", $request->siswa)
                                             ->first();
-        $temp_semester = Semester::select('tahun_ajaran')->where('id', $request->semesterValue)->first();
-        $temp_kelas = Kelas::where('id', $request->kelasValue)->first();
+        $temp_semester = Semester::select('tahun_ajaran')->where('id', $request->semester)->first();
+        $temp_kelas = Kelas::where('id', $request->kelas)->first();
         $explode_semester = explode(' ', $temp_semester->tahun_ajaran);
         $semester = $explode_semester[0];
         $tahun_pelajaran = $explode_semester[1];
         $kelas = ucfirst($temp_kelas->nama_kelas);
 
-        $siswa = Siswa::where('id', $request->siswaValue)->first();
+        $siswa = Siswa::where('id', $request->siswa)->first();
 
         $izin = Absensi::where([
-            ['id_siswa', $request->siswaValue],
+            ['id_siswa', $request->siswa],
             ['status', 'izin']
             ])->get()->count();
 
         $alpa = Absensi::where([
-            ['id_siswa', $request->siswaValue],
+            ['id_siswa', $request->siswa],
             ['status', 'alpa']
             ])->get()->count();
 
@@ -310,101 +311,172 @@ class NilaiController extends Controller
             'total' => $total_kehadiran,
         ];
 
-        $nilai = Raport::join('anggota_kelas','anggota_kelas.id', '=', 'raport.id_anggota_kelas')
-                        ->where('anggota_kelas.id_semester', $request->semesterValue)
-                        ->where('anggota_kelas.id_kelas', $request->kelasValue)
+        $mata_pelajaran = MataPelajaran::get();
+
+        $nilai = Nilai::join('anggota_kelas','anggota_kelas.id', '=', 'nilai.id_anggota_kelas')
+                        ->where('anggota_kelas.id_semester', $request->semester)
+                        ->where('anggota_kelas.id_kelas', $request->kelas)
                         ->get();
 
-        $rata_alquran = $nilai->avg('alquran');
-        $rata_iqro = $nilai->avg('iqro');
-        $rata_aqidah_akhlak = $nilai->avg('aqidah_akhlak');
-        $rata_hafalan_surat = $nilai->avg('hafalan_surat');
-        $rata_pai = $nilai->avg('pai');
-        $rata_tajwid = $nilai->avg('tajwid');
-        $rata_khot = $nilai->avg('khot');
-        $rata_all = round(collect([
-            $rata_alquran,
-            $rata_iqro,
-            $rata_aqidah_akhlak,
-            $rata_hafalan_surat,
-            $rata_pai,
-            $rata_tajwid,
-            $rata_khot,
-        ])->average(), 1);
+        if (count($nilai) == 0) {
+            return redirect()->back()->with('error', 'Belum ada nilai di kelas ini.');;
+        }
 
-        $nilai_siswa = $nilai->where("id_anggota_kelas", $get_anggota_kelas->id)->first();
-        $rata_siswa = round(collect([
-            $nilai_siswa->alquran,
-            $nilai_siswa->iqro,
-            $nilai_siswa->aqidah_akhlak,
-            $nilai_siswa->hafalan_surat,
-            $nilai_siswa->pai,
-            $nilai_siswa->tajwid,
-            $nilai_siswa->khot,
-        ])->average(), 1);
+        $rata_nilai_object = [];
+        $rata_nilai_array = [];
+        for ($i=0; $i < count($mata_pelajaran); $i++) {
+            $temp_nilai = $nilai->where('id_mata_pelajaran', $mata_pelajaran[$i]->id)->pluck('nilai')->toArray();
+            $average = array_sum($temp_nilai)/count($temp_nilai);
+            array_push($rata_nilai_object, [$mata_pelajaran[$i]->nama_pelajaran => $average]);
+            array_push($rata_nilai_array, $average);
+        }
 
-        $rata_rata = [
-            'alquran'       => $rata_alquran,
-            'iqro'          => $rata_iqro,
-            'aqidah_akhlak' => $rata_aqidah_akhlak,
-            'hafalan_surat' => $rata_hafalan_surat,
-            'pai'           => $rata_pai,
-            'tajwid'        => $rata_tajwid,
-            'khot'          => $rata_khot,
-            'all'           => $rata_all,
-            'siswa'         => $rata_siswa,
-        ];
+        //change array to object
+        $rata_all = new StdClass();
+        foreach ($rata_nilai_object as $ratas) {
+            foreach ($mata_pelajaran as $mapel) {
+                if (!empty($ratas[$mapel->nama_pelajaran])) {
+                    $temp_pelajaran = $mapel->nama_pelajaran;
+                    $rata_all->$temp_pelajaran = $ratas[$mapel->nama_pelajaran];
+                }
+            }
+        }
 
-        // $rank = Raport::from('')->sum(DB::raw('alquran + iqro'));
+        //get average from all class member
+        $temp_rata_all = array_sum($rata_nilai_array)/count($rata_nilai_array);
+        $rata_all->{'rata-rata'} = $temp_rata_all;
 
-        // $agents = User::where('is_admin','=', 'false')->get();
+        $get_nilai_siswa = $nilai->where("id_anggota_kelas", $get_anggota_kelas->id);
+
+        $nilai_siswa = new StdClass();
+        foreach ($get_nilai_siswa as $sis) {
+            foreach ($mata_pelajaran as $mapel) {
+                if ($sis->id_mata_pelajaran == $mapel->id) {
+                    $temp_pelajaran = $mapel->nama_pelajaran;
+                    $nilai_siswa->$temp_pelajaran = $sis->nilai;
+                }
+            }
+        }
+
+        $temp_rata_siswa = $get_nilai_siswa->avg('nilai');
+        $nilai_siswa->{'rata-rata'} = $temp_rata_siswa;
+
         $tempNilai = [];
         foreach ($nilai as $point) {
-            $tempNilai[] = [
+            $get_nilai_siswa_all = $nilai->where("id_anggota_kelas", $point->id);
+
+            $nilai_siswa_all = new StdClass();
+            foreach ($get_nilai_siswa_all as $sis) {
+                foreach ($mata_pelajaran as $mapel) {
+                    if ($sis->id_mata_pelajaran == $mapel->id) {
+                        $temp_pelajaran = $mapel->nama_pelajaran;
+                        $nilai_siswa_all->$temp_pelajaran = $sis->nilai;
+                    }
+                }
+            }
+
+            $temp_rata_siswa = $get_nilai_siswa_all->avg('nilai');
+            $nilai_siswa_all->{'rata-rata'} = $temp_rata_siswa;
+            // return $nilai_siswa;
+
+            $tempNilai[] = (object)[
                 'id_anggota_kelas'  => $point->id_anggota_kelas,
-                'nilai'             => $point->alquran + $point->iqro + $point->aqidah_akhlak + $point->hafalan_surat + $point->pai + $point->tajwid + $point->khot
+                'rata-rata'         => $nilai_siswa_all->{'rata-rata'}
             ];
         }
 
-        // return $tempNilai;
+        $filterTempNilai = [];
+        $check_array = [];
+        for ($i=0; $i < count($tempNilai); $i++) {
+            if (count($filterTempNilai) == 0) {
+                array_push($filterTempNilai, (object)$tempNilai[$i]);
+                array_push($check_array, $tempNilai[$i]->id_anggota_kelas);
+            }else {
+                for ($j=0; $j < count($filterTempNilai); $j++) {
+                    if (!in_array($tempNilai[$i]->id_anggota_kelas, $check_array)) {
+                        array_push($filterTempNilai, (object)$tempNilai[$i]);
+                        array_push($check_array, $tempNilai[$i]->id_anggota_kelas);
+                    }
+                }
+            }
+        }
 
-        $sortDesc = collect($tempNilai)->sortByDesc('nilai');
+        $sortDesc = collect($filterTempNilai)->sortByDesc('nilai');
 
-        // return $sortDesc['id_anggota_kelas'];
+        // return $sortDesc;
 
         $increment = 1;
         $rank = [];
         foreach ($sortDesc as $sort){
             $rank[] = [
-                'id_anggota_kelas'  => $sort['id_anggota_kelas'],
-                'nilai'             => $sort['nilai'],
+                'id_anggota_kelas'  => $sort->{'id_anggota_kelas'},
+                'nilai'             => $sort->{'rata-rata'},
                 'rank'              => $increment
             ];
             $increment += 1;
         }
+        $find_rank = array_search($get_anggota_kelas->id, array_column($rank, 'id_anggota_kelas'));
+        // return $find_rank;
+        if ($find_rank != "") {
+            $rank_siswa = (object) $rank[$find_rank];
+        }else {
+            $rank_siswa = 'Belum ada ranking';
+        }
 
-        $rank_siswa = $rank[array_search($get_anggota_kelas->id, array_column($rank, 'id_anggota_kelas'))];
+        // return $rank_siswa;
+        // return array_search(1, array_column($rank, 'id_anggota_kelas'));
 
-        // return $rank_siswa['rank'];
+        $spiritual = [
+            'title' => $request->spiritual,
+            'description' => $request->spiritual_value,
+        ];
+
+        $sosial = [
+            'title' => $request->sosial,
+            'description' => $request->sosial_value,
+        ];
+
+        // assets/images/pdf/latar.jpeg
+        // assets/images/pdf/header.png
+        $path_latar = 'assets/images/pdf/latar.jpeg';
+        $type_latar = pathinfo($path_latar, PATHINFO_EXTENSION);
+        $data_latar = file_get_contents($path_latar);
+        $image_latar = 'data:image/' . $type_latar . ';base64,' . base64_encode($data_latar);
+
+        $path_header = 'assets/images/pdf/header.png';
+        $type_header = pathinfo($path_header, PATHINFO_EXTENSION);
+        $data_header = file_get_contents($path_header);
+        $image_header = 'data:image/' . $type_header . ';base64,' . base64_encode($data_header);
+
 
         $data = [
             'semester'          => $semester,
             'kelas'             => $kelas,
             'tahun_pelajaran'   => $tahun_pelajaran,
             'siswa'             => $siswa,
-            'nilai'             => $nilai_siswa,
-            'rata_rata'         => $rata_rata,
+            'spiritual'         => $spiritual,
+            'sosial'            => $sosial,
+            'nilai'             => (array) $nilai_siswa,
+            'rata_rata'         => (array) $rata_all,
             'kehadiran'         => $kehadiran,
-            'ranking'           => $rank_siswa['rank'],
+            'ranking'           => $rank_siswa,
+            'catatan'           => $request->catatan,
+            'mata_pelajaran'    => $mata_pelajaran,
+            'image_latar'       => $image_latar,
+            'image_header'      => $image_header,
         ];
 
         // return $data;
 
-        $pdf = PDF::loadView('content.raport.raport_pdf', $data);
+        // return view('content.nilai.raport_pdf', compact(
+        //     'data',
+        // ));
+
+        $pdf = PDF::loadView('content.nilai.raport_pdf', $data);
 
         // $pdf = PDF::loadView('content.raport.raport_pdf');
 
-        return $pdf->download('nilai.pdf');
+        return $pdf->download('raport.pdf');
 
     }
 }
