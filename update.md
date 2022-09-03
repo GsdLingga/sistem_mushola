@@ -24,4 +24,4 @@
     - crud absensi tolong dicek lagi masih error
     - field create/edit absen : nama siswa, tanggal, status (tanggalnya ke set otomatis, tapi masih bisa diedit)
 
-*  setelah update, tolong di test CRUD permodul
+*  Setelah update, tolong di test CRUD permodul, biar langsung tau errornya dimana
