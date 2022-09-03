@@ -5,7 +5,7 @@
 * Untuk semua yang isi fitur delete, pake delete cascade, misal siswa A dihapus, di raport siswa A juga harus dihapus.
 
 * Module Dashboard:
-    - Guru : 1 kelas diisi 1 guru, 1 guru bisa mengisi 1 kelas, jadi pas user guru login, didashboard cuma tampil kelas dan siswa yang diajar, terus dibuatin chart _kelas_ (a, b, c dst.) designnya mirip seperti dashboard yg sekarang
+    - Guru : 1 kelas diisi 1 guru, 1 guru bisa mengisi banyak kelas, jadi pas user guru login, didashboard cuma tampil kelas dan siswa yang diajar, terus dibuatin chart _kelas_ (a, b, c dst.) designnya mirip seperti dashboard yg sekarang
 
     - Admin : dashboard diisi total dan chart seluruh _user_ (admin, guru, pengurus) dan seluruh _kelas_ (a, b, c dst.)
 
