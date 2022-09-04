@@ -28,45 +28,45 @@ class NilaiController extends Controller
     {
         $role = Auth::user()->role;
 
-        // return $role;
-
-        $siswa = Siswa::select('id','nama')->get();
         $semester_active = Semester::select('id','tahun_ajaran')
         ->where('status',"1")->first();
         $mata_pelajaran = MataPelajaran::get();
+        $nilai_siswa = Nilai::get();
 
         if ($role == 'Guru') {
             $id = Auth::user()->id;
-            $pengajar = Pengajar::where([['id_user',$id],['id_semester',$semester_active->id]])->first();
-            // return $semester_active;
-            $nilai = DB::table('nilai')
-            ->join('anggota_kelas','anggota_kelas.id', '=', 'nilai.id_anggota_kelas')
-            ->join('siswa','siswa.id', '=', 'anggota_kelas.id_siswa')
-            ->join('kelas','kelas.id','=','anggota_kelas.id_siswa')
-            ->join('mata_pelajaran', 'mata_pelajaran.id', '=', 'nilai.id_mata_pelajaran')
-            ->where([['anggota_kelas.id_semester', $semester_active->id], ['kelas.id', $pengajar->id_kelas]])
+            $siswa = AnggotaKelas::select('siswa.id','nama','id_semester','nama_kelas','id_guru')
+            ->join('siswa','siswa.id','=','anggota_kelas.id_siswa')
+            ->join('kelas','kelas.id','=','anggota_kelas.id_kelas')
+            ->where([['id_semester',$semester_active->id],['id_guru',$id]])
             ->get();
-            // return $nilai;
         }else {
-            $nilai = DB::table('nilai')
-            ->join('anggota_kelas','anggota_kelas.id', '=', 'nilai.id_anggota_kelas')
-            ->join('siswa','siswa.id', '=', 'anggota_kelas.id_siswa')
-            ->join('kelas','kelas.id','=','anggota_kelas.id_siswa')
-            ->join('mata_pelajaran', 'mata_pelajaran.id', '=', 'nilai.id_mata_pelajaran')
-            ->where('anggota_kelas.id_semester', $semester_active->id)
-            // ->select('raport.*','siswa.nama')
+            $siswa = AnggotaKelas::select('siswa.id','nama','id_semester','nama_kelas','id_guru')
+            ->join('siswa','siswa.id','=','anggota_kelas.id_siswa')
+            ->join('kelas','kelas.id','=','anggota_kelas.id_kelas')
+            // ->join('users','users.id','=','kelas.id_guru')
+            ->where('id_semester',$semester_active->id)
             ->get();
         }
 
-        // return $mata_pelajaran;
+        $nilai_all = [];
+        foreach ($siswa as $sis) {
+            foreach ($mata_pelajaran as $mapel) {
+                $nama_mapel = $mapel->nama_pelajaran;
+                foreach ($nilai_siswa as $nilai_sis) {
+                    if ($sis->id == $nilai_sis->id_anggota_kelas && $mapel->id == $nilai_sis->id_mata_pelajaran) {
+                        $sis->$nama_mapel = $nilai_sis->nilai;
+                    }
+                }
+            }
+            array_push($nilai_all, $sis);
+        }
 
         $semester = Semester::select('id','tahun_ajaran')->get();
         $kelas = Kelas::select('id', 'nama_kelas')->get();
 
-        // return $nilai;
-
         return view('content.nilai.nilai_index', compact(
-            'nilai',
+            'nilai_all',
             'semester',
             'kelas',
             'mata_pelajaran'
@@ -100,10 +100,8 @@ class NilaiController extends Controller
             $id = Auth::user()->id;
             $semester_active = Semester::select('id','tahun_ajaran')
                             ->where('status',"1")->first();
-            $pengajar = Pengajar::where([['id_user',$id],['id_semester',$semester_active->id]])->first();
-            // return $semester_active;
             $kelas = Kelas::select('id','nama_kelas')
-            ->where('id',$pengajar->id_kelas)
+            ->where('id_guru',$id)
             ->first();
         }else {
             $kelas = Kelas::select('id','nama_kelas')
@@ -118,27 +116,34 @@ class NilaiController extends Controller
         $semester_active = Semester::select('id','tahun_ajaran')
                             ->where('status',"1")->first();
 
-        $nilai = Nilai::where('id_mata_pelajaran', $mata_pelajaran->id)
-        ->pluck('id_anggota_kelas')->all();
+        // $nilai = Nilai::where('id_mata_pelajaran', $mata_pelajaran->id)
+        // ->pluck('id_anggota_kelas')->all();
 
         $anggota_kelas = AnggotaKelas::join('siswa', 'anggota_kelas.id_siswa', '=', 'siswa.id')
         ->where([['id_semester', $semester_active->id], ['id_kelas', $kelas->id]])
-        ->whereNotIn('anggota_kelas.id', $nilai)
+        // ->whereNotIn('anggota_kelas.id', $nilai)
         ->get();
 
-        // return $anggota_kelas->isEmpty();
+        $nilai = Nilai::where('id_mata_pelajaran',$mata_pelajaran->id)->get();
 
-        if ($anggota_kelas->isEmpty()) {
-            return redirect()->back()->with('error', 'Semua Anggota Kelas Sudah Memiliki Nilai');
-        }else {
-            return view('content.nilai.nilai_create', compact(
-                'anggota_kelas',
-                'mata_pelajaran',
-                'kelas'
-            ));
+        $nilai_kelas = [];
+        foreach ($anggota_kelas as $anggota) {
+            foreach ($nilai as $nilais) {
+                if ($anggota->id == $nilais->id_anggota_kelas) {
+                    $anggota->id_nilai = $nilais->id;
+                    $anggota->nilai = $nilais->nilai;
+                }
+            }
+            array_push($nilai_kelas, $anggota);
         }
 
+        // return $nilai_kelas;
 
+        return view('content.nilai.nilai_create', compact(
+            'nilai_kelas',
+            'mata_pelajaran',
+            'kelas'
+        ));
     }
 
     /**
@@ -163,41 +168,32 @@ class NilaiController extends Controller
 
         $this->validate($request, $rules, $customMessages);
 
-        // return $request;
-
         try {
-            // $semester_active = Semester::select('id','tahun_ajaran')
-            //                 ->where('status',"1")->first();
-
-            // $get_anggota_kelas = AnggotaKelas::where("id_kelas", $request->kelasValue)
-            //                                     ->where("id_semester", $semester_active->id)
-            //                                     ->where("id_siswa", $request->nama)
-            //                                     ->first();
-
             $pelajaran = [];
+            $edit = [];
 
             for ($i=0; $i < count($request->id) ; $i++) {
-                $temp = ['id_anggota_kelas' => $request->id[$i], 'id_mata_pelajaran' => $request->mata_pelajaran_id, 'nilai' => $request->nilai[$i]];
-                array_push($pelajaran, $temp);
-                // return $temp;
+                if ($request->id_nilai[$i] != null) {
+                    $temp_nilai = ['id' => $request->id_nilai[$i],'id_anggota_kelas' => $request->id[$i], 'id_mata_pelajaran' => $request->mata_pelajaran_id, 'nilai' => $request->nilai[$i]];
+                    array_push($edit, $temp_nilai);
+                }else {
+                    $temp = ['id_anggota_kelas' => $request->id[$i], 'id_mata_pelajaran' => $request->mata_pelajaran_id, 'nilai' => $request->nilai[$i]];
+                    array_push($pelajaran, $temp);
+                }
+            }
+            if (count($edit) != 0) {
+                foreach ($edit as $edit_nilai) {
+                    $nilai_edit = Nilai::find($edit_nilai['id']);
+                    $nilai_edit->nilai = $edit_nilai['nilai'];
+                    $nilai_edit->save();
+                }
             }
 
-            $nilai = Nilai::insert($pelajaran);
+            if (count($pelajaran) != 0) {
+                $nilai = Nilai::insert($pelajaran);
+            }
 
-            // return $pelajaran;
-
-            // $raport  = Raport::create([
-            //     'id_anggota_kelas'  => $get_anggota_kelas->id,
-            //     'alquran'           => $request->alquran,
-            //     'iqro'              => $request->iqro,
-            //     'aqidah_akhlak'     => $request->aqidah_akhlak,
-            //     'hafalan_surat'     => $request->hafalan_surat,
-            //     'pai'               => $request->pai,
-            //     'tajwid'            => $request->tajwid,
-            //     'khot'              => $request->khot,
-            // ]);
-
-            return redirect()->route('nilai.index')->with('success', 'Nilai Created Successfully');
+            return redirect()->route('nilai.index')->with('success', 'Nilai Update or Create Successfully');
         } catch (Throwable $e) {
             return redirect()->back()->with('error', $e);
         }

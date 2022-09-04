@@ -8,6 +8,7 @@ use App\Models\AnggotaKelas;
 use App\Models\Pengajar;
 use App\Models\Kelas;
 use App\Models\Semester;
+use App\Models\User;
 class GuruController extends Controller
 {
     /**
@@ -20,11 +21,9 @@ class GuruController extends Controller
         $id = Auth::user()->id;
         $role = Auth::user()->role;
         $semester_aktif = Semester::where('status', '1')->first();
-        $pengajar = Pengajar::where([['id_semester', $semester_aktif->id],
-        ['id_user', $id]])->first();
-        $kelas = Kelas::where('id', $pengajar->id_kelas)->first();
+        $kelas = Kelas::where('id_guru', $id)->first();
         $siswa = AnggotaKelas::where([['id_semester', $semester_aktif->id],
-        ['id_kelas', $pengajar->id_kelas]])->count();
+        ['id_kelas', $kelas->id]])->count();
         $kelasA = AnggotaKelas::where([
             ['id_semester', '=', $semester_aktif->id],
             ['id_kelas', '=', '1']
@@ -41,6 +40,12 @@ class GuruController extends Controller
             ['id_semester', $semester_aktif->id],
             ['id_kelas', 4]
         ])->count();
+
+        $total_user = User::count();
+        $admin = User::where('role', 'Admin')->count();
+        $pengurus = User::where('role', 'Pengurus')->count();
+        $guru = User::where('role', 'Guru')->count();
+
         return view('content.home', compact(
             'role',
             'kelas',
@@ -48,7 +53,11 @@ class GuruController extends Controller
             'kelasA',
             'kelasB',
             'kelasC',
-            'kelasD'
+            'kelasD',
+            'admin',
+            'pengurus',
+            'guru',
+            'total_user'
         ));
     }
 

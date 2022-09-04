@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Models\Kelas;
 use App\Models\Siswa;
 use App\Models\Semester;
+use Illuminate\Support\Facades\Auth;
 use App\Models\AnggotaKelas;
 use Carbon\Carbon;
 use DB;
@@ -26,14 +27,21 @@ class SiswaController extends Controller
 
     public function index()
     {
+        $role = Auth::user()->role;
+        $id = Auth::user()->id;
         Carbon::setLocale('id');
 
-        $siswa = Siswa::select('siswa.id as id','siswa.nama','siswa.no_induk','kelas.nama_kelas','siswa.jenis_kelamin','siswa.alamat','siswa.telepon')
-        ->join('anggota_kelas','anggota_kelas.id_siswa','=','siswa.id')
-        ->join('kelas','kelas.id','=','anggota_kelas.id_kelas')
-        ->where('siswa.status','=','1')->get();
-
-        // return $siswa;
+        if ($role == 'Guru') {
+            $siswa = Siswa::select('siswa.id as id','siswa.nama','siswa.no_induk','kelas.nama_kelas','siswa.jenis_kelamin','siswa.alamat','siswa.telepon')
+            ->join('anggota_kelas','anggota_kelas.id_siswa','=','siswa.id')
+            ->join('kelas','kelas.id','=','anggota_kelas.id_kelas')
+            ->where([['siswa.status','=','1'],['kelas.id_guru','=',$id]])->get();
+        } else {
+            $siswa = Siswa::select('siswa.id as id','siswa.nama','siswa.no_induk','kelas.nama_kelas','siswa.jenis_kelamin','siswa.alamat','siswa.telepon')
+            ->join('anggota_kelas','anggota_kelas.id_siswa','=','siswa.id')
+            ->join('kelas','kelas.id','=','anggota_kelas.id_kelas')
+            ->where('siswa.status','=','1')->get();
+        }
 
         return view('content.siswa.siswa_index', compact(
             'siswa'
@@ -48,8 +56,14 @@ class SiswaController extends Controller
      */
     public function create()
     {
-        $kelas = Kelas::get();
-        // return $kelas;
+        $role = Auth::user()->role;
+        $id = Auth::user()->id;
+        if ($role == 'Guru') {
+            $kelas = Kelas::where('kelas.id_guru',$id)->get();
+        } else {
+            $kelas = Kelas::get();
+        }
+
         return view('content.siswa.siswa_create', compact('kelas'));
     }
 

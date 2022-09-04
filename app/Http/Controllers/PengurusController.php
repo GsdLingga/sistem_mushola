@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use App\Models\AnggotaKelas;
 use App\Models\Semester;
+use App\Models\User;
 class PengurusController extends Controller
 {
     /**
@@ -34,13 +35,23 @@ class PengurusController extends Controller
             ['id_semester', $semester_aktif->id],
             ['id_kelas', 4]
         ])->count();
+
+        $total_user = User::count();
+        $admin = User::where('role', 'Admin')->count();
+        $pengurus = User::where('role', 'Pengurus')->count();
+        $guru = User::where('role', 'Guru')->count();
+
         return view('content.home', compact(
             'siswa',
             'role',
             'kelasA',
             'kelasB',
             'kelasC',
-            'kelasD'
+            'kelasD',
+            'admin',
+            'pengurus',
+            'guru',
+            'total_user'
         ));
     }
 

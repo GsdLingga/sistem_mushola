@@ -10,7 +10,6 @@ use App\Http\Controllers\JadwalPengajianController;
 use App\Http\Controllers\ZakatController;
 use App\Http\Controllers\SppController;
 use App\Http\Controllers\AbsensiController;
-use App\Http\Controllers\RaportController;
 use App\Http\Controllers\AnggotaKelasController;
 use App\Http\Controllers\NilaiController;
 
@@ -55,10 +54,7 @@ Route::middleware('is_adminpengurus')->group(function () {
 Route::middleware('is_adminguru')->group(function () {
     Route::resource('siswa', SiswaController::class);
     Route::resource('absensi', AbsensiController::class);
-    // Route::resource('anggota_kelas', AnggotaKelasController::class);
-    // Route::resource('raport', RaportController::class);
     Route::resource('nilai', NilaiController::class);
     Route::post('create-pdf-file', [NilaiController::class, 'createPDF'])->name('nilai.pdf');
-    // Route::post('create-pdf-file', [RaportController::class, 'createPDF'])->name('raport.pdf');
 
 });

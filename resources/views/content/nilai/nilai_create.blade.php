@@ -95,7 +95,7 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                @foreach ($anggota_kelas as $anggota)
+                                @foreach ($nilai_kelas as $anggota)
                                     <tr>
                                         <td>{{$loop->iteration}}</td>
                                         <td>{{ $anggota->nama }}</td>
@@ -104,7 +104,10 @@
                                                 <input name="id[]" id="id" data-parsley-type="number" type="text" class="form-control" required value="{{$anggota->id}}" hidden/>
                                             </div>
                                             <div>
-                                                <input name="nilai[]" id="nilai" data-parsley-type="number" type="text" class="form-control" required placeholder="Enter only numbers"/>
+                                                <input name="id_nilai[]" id="id_nilai" data-parsley-type="number" type="text" class="form-control" value="{{$anggota->id_nilai}}" hidden/>
+                                            </div>
+                                            <div>
+                                                <input name="nilai[]" id="nilai" data-parsley-type="number" type="text" class="form-control" required value="{{$anggota->nilai}}" placeholder="Enter only numbers"/>
                                             </div>
                                         </td>
                                     </tr>

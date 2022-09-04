@@ -1,10 +1,10 @@
 <!doctype html>
 <html lang="en">
 
-    
+
 <!-- Mirrored from themesdesign.in/nazox/layouts/vertical/pages-maintenance.html by HTTrack Website Copier/3.x [XR&CO'2014], Mon, 01 Mar 2021 09:17:34 GMT -->
 <head>
-        
+
         <meta charset="utf-8" />
         <title>Homepage</title>
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -33,7 +33,7 @@
                         <a href="{{ route('pengurus.dashboard') }}" class="text-dark"><i class="mdi mdi-home-variant h2"></i></a>
                     @elseif(auth()->user()->role == 'Guru')
                         <a href="{{ route('guru.dashboard') }}" class="text-dark"><i class="mdi mdi-home-variant h2"></i></a>
-                    @endif    
+                    @endif
                 {{-- <a href="{{ url('/dashboard') }}" class="text-sm text-gray-700 dark:text-gray-500 underline">Dashboard</a> --}}
                 @else
                     <a href="{{ route('login') }}" class="text-dark"><i class="mdi mdi-home-variant h2"></i></a>
@@ -56,14 +56,14 @@
                                             <a href="{{ route('pengurus.dashboard') }}">
                                         @elseif(auth()->user()->role == 'Guru')
                                             <a href="{{ route('guru.dashboard') }}">
-                                        @endif    
+                                        @endif
                                     {{-- <a href="{{ url('/dashboard') }}" class="text-sm text-gray-700 dark:text-gray-500 underline">Dashboard</a> --}}
                                     @else
                                         <a href="{{ route('login') }}">
                                     @endauth
                                 @endif
                                 {{-- <a href="index.html"> --}}
-                                    <img src="{{asset('assets/images/logo-dark.png')}}" alt="logo" height="20" />
+                                    <img src="{{asset('assets/images/logo.png')}}" alt="logo" height="100" />
                                 </a>
                             </div>
 
@@ -86,7 +86,7 @@
                                                     <i class="mdi mdi-access-point-network font-size-24 text-primary"></i>
                                                 </span>
                                             </div>
-                                            
+
                                             <h5 class="font-size-15 text-uppercase mt-4">Why is the Site Down?</h5>
                                             <p class="text-muted mb-0">There are many variations of passages of
                                                 Lorem Ipsum available, but the majority have suffered alteration.</p>

@@ -123,27 +123,28 @@
                                 <th>No</th>
                                 <th>Nama</th>
                                 <th>Kelas</th>
-                                <th>Mata Pelajaran</th>
-                                <th>Nilai</th>
-                                <th>Action</th>
+                                <th>Al-Quran</th>
+                                <th>Iqro</th>
+                                <th>Aqidah Akhlak</th>
+                                <th>Hafalan Surat</th>
+                                <th>PAI</th>
+                                <th>Tajwid</th>
+                                <th>Khot</th>
                             </tr>
                         </thead>
                         <tbody>
-                            @foreach ($nilai as $nilais)
+                            @foreach ($nilai_all as $nilai)
                                 <tr>
                                     <td>{{ $loop->iteration }}</td>
-                                    <td>{{ $nilais->nama }}</td>
-                                    <td>{{ Str::ucfirst($nilais->nama_kelas) }}</td>
-                                    <td>{{ $nilais->nama_pelajaran }}</td>
-                                    <td>{{ $nilais->nilai  }}</td>
-                                    <td>
-                                        <a href="{{route('nilai.edit', $nilais->id)}}" class="mr-3 text-primary" data-toggle="tooltip" data-placement="top" title="" data-original-title="Edit"><i class="mdi mdi-pencil font-size-18"></i></a>
-                                        <form action="{{route('nilai.destroy', $nilais->id)}}" method="POST" style="display: contents;">
-                                            @method('DELETE')
-                                            @csrf
-                                            <button class="text-danger" style="background-color: transparent; border: 0;" data-toggle="tooltip" data-placement="top" title="" data-original-title="Delete"><i class="mdi mdi-trash-can font-size-18"></i></button>
-                                        </form>
-                                    </td>
+                                    <td>{{ $nilai->nama }}</td>
+                                    <td>{{ Str::ucfirst($nilai->nama_kelas) }}</td>
+                                    <td>{{ $nilai->{'Al-Quran'} }}</td>
+                                    <td>{{ $nilai->{'Iqro'} }}</td>
+                                    <td>{{ $nilai->{'Aqidah Akhlak'} }}</td>
+                                    <td>{{ $nilai->{'Hafalan Surat'} }}</td>
+                                    <td>{{ $nilai->{'PAI'} }}</td>
+                                    <td>{{ $nilai->{'Tajwid'} }}</td>
+                                    <td>{{ $nilai->{'Khot'} }}</td>
                                 </tr>
                             @endforeach
                         </tbody>

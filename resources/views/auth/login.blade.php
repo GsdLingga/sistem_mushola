@@ -42,6 +42,6 @@
 
     <div class="mt-5 text-center">
         {{-- <p>Don't have an account ? <a href="{{ route('register') }}" class="font-weight-medium text-primary"> Register </a> </p> --}}
-        <p>© 2020 Nazox. Crafted with <i class="mdi mdi-heart text-danger"></i> by Themesdesign</p>
+        <p>© {{now()->year}}. Crafted with <i class="mdi mdi-heart text-danger"></i></p>
     </div>
 @endsection

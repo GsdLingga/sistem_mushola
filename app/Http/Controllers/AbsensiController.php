@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Auth;
 use Carbon\Carbon;
 use App\Models\Absensi;
 use Illuminate\Support\Facades\Log;
@@ -17,13 +18,28 @@ class AbsensiController extends Controller
      */
     public function index()
     {
+        $role = Auth::user()->role;
+        $id = Auth::user()->id;
         $getdate = Carbon::now();
         $datenow = $getdate->toDateString();
-        $absensi = DB::table('absensi')
-        ->join('siswa', 'absensi.id_siswa', '=', 'siswa.id' )
-        ->select('absensi.*', 'siswa.nama')
-        ->where('absensi.tgl', '=', $datenow)
-        ->get();
+
+        if ($role == 'Guru') {
+            $absensi = DB::table('absensi')
+            ->join('siswa', 'absensi.id_siswa', '=', 'siswa.id' )
+            ->join('anggota_kelas','anggota_kelas.id_siswa','=','siswa.id')
+            ->join('kelas','kelas.id','=','anggota_kelas.id_kelas')
+            ->select('absensi.*', 'siswa.nama','kelas.nama_kelas')
+            ->where([['absensi.tgl', '=', $datenow],['kelas.id_guru','=',$id]])
+            ->get();
+        } else {
+            $absensi = DB::table('absensi')
+            ->join('siswa', 'absensi.id_siswa', '=', 'siswa.id' )
+            ->select('absensi.*', 'siswa.nama')
+            ->where('absensi.tgl', '=', $datenow)
+            ->get();
+        }
+
+
 
         return view('content.absensi.absensi_index', compact(
             'absensi'
@@ -38,10 +54,28 @@ class AbsensiController extends Controller
      */
     public function create()
     {
+        $role = Auth::user()->role;
+        $id = Auth::user()->id;
         $getdate = Carbon::now();
         $datenow = $getdate->toDateString();
-        $absensi = DB::table('siswa')
-                ->select('siswa.id','siswa.nama')
+
+        if ($role == 'Guru') {
+            $absensi = DB::table('siswa')
+                ->select('siswa.id','siswa.nama', 'kelas.nama_kelas')
+                ->join('anggota_kelas','anggota_kelas.id_siswa','=','siswa.id')
+                ->join('kelas','anggota_kelas.id_kelas','=','kelas.id')
+                ->where([['siswa.status', '1'],['kelas.id_guru',$id]])
+                ->whereNotIn('siswa.id',
+                    DB::table('absensi')
+                    ->select('absensi.id_siswa')
+                    ->where('absensi.tgl', '=', $datenow)
+                )
+                ->get();
+        }else {
+            $absensi = DB::table('siswa')
+                ->select('siswa.id','siswa.nama', 'kelas.nama_kelas')
+                ->join('anggota_kelas','anggota_kelas.id_siswa','=','siswa.id')
+                ->join('kelas','anggota_kelas.id_kelas','=','kelas.id')
                 ->where('siswa.status', '1')
                 ->whereNotIn('siswa.id',
                     DB::table('absensi')
@@ -49,6 +83,7 @@ class AbsensiController extends Controller
                     ->where('absensi.tgl', '=', $datenow)
                 )
                 ->get();
+        }
 
         return view('content.absensi.absensi_create', compact(
             'absensi'

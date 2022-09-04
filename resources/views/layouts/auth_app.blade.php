@@ -1,10 +1,10 @@
 <!doctype html>
 <html lang="en">
 
-    
+
 <!-- Mirrored from themesdesign.in/nazox/layouts/vertical/auth-login.html by HTTrack Website Copier/3.x [XR&CO'2014], Mon, 01 Mar 2021 09:17:34 GMT -->
 <head>
-        
+
         <meta charset="utf-8" />
         <title>Login | Nazox - Responsive Bootstrap 4 Admin Dashboard</title>
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -24,7 +24,7 @@
 
     <body class="auth-body-bg">
         <div class="home-btn d-none d-sm-block">
-            <a href="index.html"><i class="mdi mdi-home-variant h2 text-white"></i></a>
+            <a href="/"><i class="mdi mdi-home-variant h2 text-white"></i></a>
         </div>
         <div>
             <div class="container-fluid p-0">
@@ -37,11 +37,11 @@
                                         <div>
                                             <div class="text-center">
                                                 <div>
-                                                    <a href="index.html" class="logo"><img src="{{asset('assets/images/logo-dark.png')}}" height="20" alt="logo"></a>
+                                                    <a href="index.html" class="logo"><img src="{{asset('assets/images/logo.png')}}" height="100" alt="logo"></a>
                                                 </div>
-    
+
                                                 <h4 class="font-size-18 mt-4">Welcome Back !</h4>
-                                                <p class="text-muted">Sign in to continue to Nazox.</p>
+                                                <p class="text-muted">Sign in to continue.</p>
                                             </div>
 
                                             @yield('content')
@@ -62,7 +62,7 @@
             </div>
         </div>
 
-        
+
 
         <!-- JAVASCRIPT -->
         <script src="{{asset('assets/libs/jquery/jquery.min.js')}}"></script>
