@@ -1,5 +1,5 @@
 @extends('layouts.app2')
-@section('title', 'Edit Siswa')
+@section('title', 'Tambah Siswa')
 @push('css')
     <link href="{{asset('assets/libs/select2/css/select2.min.css')}}" rel="stylesheet" type="text/css" />
     <link href="{{asset('assets/libs/bootstrap-datepicker/css/bootstrap-datepicker.min.css')}}" rel="stylesheet">
@@ -11,12 +11,12 @@
     <div class="row">
         <div class="col-12">
             <div class="page-title-box d-flex align-items-center justify-content-between">
-                <h4 class="mb-0">Kelas</h4>
+                <h4 class="mb-0">Semester</h4>
 
                 <div class="page-title-right">
                     <ol class="breadcrumb m-0">
-                        <li class="breadcrumb-item"><a href="javascript: void(0);">Kelas</a></li>
-                        <li class="breadcrumb-item active">Edit Kelas</li>
+                        <li class="breadcrumb-item"><a href="javascript: void(0);">Semester</a></li>
+                        <li class="breadcrumb-item active">Tambah Semester</li>
                     </ol>
                 </div>
 
@@ -48,16 +48,32 @@
         <div class="col-xl-12">
             <div class="card">
                 <div class="card-body">
-                    <h4 class="card-title">Edit Kelas</h4>
+                    <h4 class="card-title">Tambah Semester</h4>
                     <p class="card-title-desc">
                     </p>
-                    <form class="custom-validation" action="{{ route('kelas.update', $kelas->id) }}" method="POST">
-                        @method('PATCH')
+                    <form class="custom-validation" action="{{ route('semester.store') }}" method="POST">
                         @csrf
                         <div class="form-group">
-                            <label>Nama Kelas</label>
-                            <input name="nama_kelas" id="nama_kelas" type="text" class="form-control" required placeholder="Type something" value="{{ $kelas->nama_kelas }}"/>
-                            @error('nama_kelas')
+                            <label class="control-label">Semester</label>
+                            <select name="semester" id="semester" class="form-control select2" required>
+                                <option value="">Select</option>
+                                <optgroup label="Semester">
+                                    <option value="Genap">Genap</option>
+                                    <option value="Ganjil">Ganjil</option>
+                                </optgroup>
+                            </select>
+                            @error('semester')
+                                <span class="invalid-feedback" role="alert">
+                                    <strong>{{ $message }}</strong>
+                                </span>
+                            @enderror
+                        </div>
+                        <div class="form-group mb-3">
+                            <label>Mulai Tahun Ajaran</label>
+                            <div class="input-group">
+                                <input name="tahun_ajaran" id="tahun_ajaran" class="form-control" type="datetime-local" id="example-datetime-local-input">
+                            </div><!-- input-group -->
+                            @error('tahun_ajaran')
                                 <span class="invalid-feedback" role="alert">
                                     <strong>{{ $message }}</strong>
                                 </span>
@@ -66,7 +82,7 @@
                         <div class="form-group mb-0">
                             <div>
                                 <button type="submit" class="btn btn-primary waves-effect waves-light mr-1">
-                                    Update
+                                    Submit
                                 </button>
                                 {{-- <button type="reset" class="btn btn-secondary waves-effect">
                                     Cancel

@@ -12,6 +12,9 @@ use App\Http\Controllers\SppController;
 use App\Http\Controllers\AbsensiController;
 use App\Http\Controllers\AnggotaKelasController;
 use App\Http\Controllers\NilaiController;
+use App\Http\Controllers\KelasController;
+use App\Http\Controllers\PengajarController;
+use App\Http\Controllers\SemesterController;
 
 /*
 |--------------------------------------------------------------------------
@@ -35,6 +38,9 @@ Route::get('/', function () {
 Route::prefix('admin')->middleware('is_admin')->group(function(){
     Route::get('dashboard', [AdminController::class,'index'])->name('admin.dashboard');
     Route::resource('user', UsersController::class);
+    Route::resource('kelas', KelasController::class);
+    Route::resource('pengajar', PengajarController::class);
+    Route::resource('semester', SemesterController::class);
 });
 
 Route::prefix('pengurus')->middleware('is_pengurus')->group(function(){

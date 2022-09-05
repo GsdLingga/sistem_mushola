@@ -23,6 +23,18 @@
                             <span>User</span>
                         </a>
                     </li>
+
+                    <li>
+                        <a href="javascript: void(0);" class="has-arrow waves-effect">
+                            <i class="ri-user-line"></i>
+                            <span>Management Kelas</span>
+                        </a>
+                        <ul class="sub-menu" aria-expanded="false">
+                            <li><a href="{{route('kelas.index')}}">Daftar Kelas</a></li>
+                            <li><a href="{{route('pengajar.index')}}">Pengajar</a></li>
+                            <li><a href="{{route('semester.index')}}">Semester</a></li>
+                        </ul>
+                    </li>
                 @elseif (auth()->user()->role == 'Pengurus')
                     <li>
                         <a href="{{route('pengurus.dashboard')}}" class="waves-effect">

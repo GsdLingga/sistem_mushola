@@ -6,6 +6,8 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
 use Carbon\Carbon;
+use App\Models\Semester;
+use App\Models\Pengajar;
 use App\Models\Absensi;
 use Illuminate\Support\Facades\Log;
 
@@ -22,6 +24,7 @@ class AbsensiController extends Controller
         $id = Auth::user()->id;
         $getdate = Carbon::now();
         $datenow = $getdate->toDateString();
+        $get_kelas = Pengajar::where('id_user',$id)->pluck('id')->toArray();
 
         if ($role == 'Guru') {
             $absensi = DB::table('absensi')
@@ -29,7 +32,8 @@ class AbsensiController extends Controller
             ->join('anggota_kelas','anggota_kelas.id_siswa','=','siswa.id')
             ->join('kelas','kelas.id','=','anggota_kelas.id_kelas')
             ->select('absensi.*', 'siswa.nama','kelas.nama_kelas')
-            ->where([['absensi.tgl', '=', $datenow],['kelas.id_guru','=',$id]])
+            ->where([['absensi.tgl', '=', $datenow]])
+            ->whereIn('kelas.id',$get_kelas)
             ->get();
         } else {
             $absensi = DB::table('absensi')
@@ -39,8 +43,7 @@ class AbsensiController extends Controller
             ->get();
         }
 
-
-
+        // return $absensi;
         return view('content.absensi.absensi_index', compact(
             'absensi'
         ));
@@ -58,13 +61,17 @@ class AbsensiController extends Controller
         $id = Auth::user()->id;
         $getdate = Carbon::now();
         $datenow = $getdate->toDateString();
+        $semester_active = Semester::select('id','tahun_ajaran')
+            ->where('status',"1")->first();
+        $get_kelas = Pengajar::where([['id_user',$id],['id_semester',$semester_active->id]])->pluck('id_kelas')->toArray();
 
         if ($role == 'Guru') {
             $absensi = DB::table('siswa')
                 ->select('siswa.id','siswa.nama', 'kelas.nama_kelas')
                 ->join('anggota_kelas','anggota_kelas.id_siswa','=','siswa.id')
                 ->join('kelas','anggota_kelas.id_kelas','=','kelas.id')
-                ->where([['siswa.status', '1'],['kelas.id_guru',$id]])
+                ->where([['siswa.status', '1']])
+                ->whereIn('kelas.id',$get_kelas)
                 ->whereNotIn('siswa.id',
                     DB::table('absensi')
                     ->select('absensi.id_siswa')
@@ -88,7 +95,6 @@ class AbsensiController extends Controller
         return view('content.absensi.absensi_create', compact(
             'absensi'
         ));
-        // return $absensi;
     }
 
     /**

@@ -21,25 +21,42 @@ class GuruController extends Controller
         $id = Auth::user()->id;
         $role = Auth::user()->role;
         $semester_aktif = Semester::where('status', '1')->first();
-        $kelas = Kelas::where('id_guru', $id)->first();
-        $siswa = AnggotaKelas::where([['id_semester', $semester_aktif->id],
-        ['id_kelas', $kelas->id]])->count();
-        $kelasA = AnggotaKelas::where([
-            ['id_semester', '=', $semester_aktif->id],
-            ['id_kelas', '=', '1']
-        ])->count();
-        $kelasB = AnggotaKelas::where([
-            ['id_semester', $semester_aktif->id],
-            ['id_kelas', 2]
-        ])->count();
-        $kelasC = AnggotaKelas::where([
-            ['id_semester', $semester_aktif->id],
-            ['id_kelas', 3]
-        ])->count();
-        $kelasD = AnggotaKelas::where([
-            ['id_semester', $semester_aktif->id],
-            ['id_kelas', 4]
-        ])->count();
+        $get_kelas = Pengajar::where('id_user', $id)->pluck('id_kelas')->toArray();
+        $siswa = AnggotaKelas::where([['id_semester', $semester_aktif->id]])->get();
+
+        $get_siswa = AnggotaKelas::where([['id_semester', $semester_aktif->id]])
+        ->whereIn('id_kelas',$get_kelas)->get();
+
+        $kelas = Kelas::whereIn('id',$get_kelas)->get();
+
+        $total_kelas = [];
+        foreach ($kelas as $kls) {
+            $counter = 0;
+            foreach ($get_siswa as $sis) {
+                if ($sis->id_kelas == $kls->id) {
+                    $counter += 1;
+                }
+            }
+            $kls->total = $counter;
+            array_push($total_kelas, $kls);
+        }
+
+        $chart_get_kelas = Kelas::get();
+        $chart_get_anggota_kelas = AnggotaKelas::where('id_semester',$semester_aktif->id)->get();
+
+        $chart_get_total_kelas = [];
+        foreach ($chart_get_kelas as $chart_kls) {
+            $counter = 0;
+            foreach ($chart_get_anggota_kelas as $chart_anggota) {
+                if ($chart_anggota->id_kelas == $chart_kls->id) {
+                    $counter += 1;
+                }
+            }
+            $chart_kls->total = $counter;
+            array_push($chart_get_total_kelas, $chart_kls);
+        }
+
+        $chart_total_anggota_kelas = $chart_get_anggota_kelas->count();
 
         $total_user = User::count();
         $admin = User::where('role', 'Admin')->count();
@@ -48,12 +65,10 @@ class GuruController extends Controller
 
         return view('content.home', compact(
             'role',
-            'kelas',
             'siswa',
-            'kelasA',
-            'kelasB',
-            'kelasC',
-            'kelasD',
+            'total_kelas',
+            'chart_get_total_kelas',
+            'chart_total_anggota_kelas',
             'admin',
             'pengurus',
             'guru',

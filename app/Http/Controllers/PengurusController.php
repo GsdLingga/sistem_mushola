@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use App\Models\AnggotaKelas;
 use App\Models\Semester;
+use App\Models\Kelas;
 use App\Models\User;
 class PengurusController extends Controller
 {
@@ -19,22 +20,23 @@ class PengurusController extends Controller
         $role = Auth::user()->role;
         $semester_aktif = Semester::where('status', '1')->first();
         $siswa = AnggotaKelas::where('id_semester', $semester_aktif->id)->count();
-        $kelasA = AnggotaKelas::where([
-            ['id_semester', '=', $semester_aktif->id],
-            ['id_kelas', '=', '1']
-        ])->count();
-        $kelasB = AnggotaKelas::where([
-            ['id_semester', $semester_aktif->id],
-            ['id_kelas', 2]
-        ])->count();
-        $kelasC = AnggotaKelas::where([
-            ['id_semester', $semester_aktif->id],
-            ['id_kelas', 3]
-        ])->count();
-        $kelasD = AnggotaKelas::where([
-            ['id_semester', $semester_aktif->id],
-            ['id_kelas', 4]
-        ])->count();
+
+        $chart_get_kelas = Kelas::get();
+        $chart_get_anggota_kelas = AnggotaKelas::where('id_semester',$semester_aktif->id)->get();
+
+        $chart_get_total_kelas = [];
+        foreach ($chart_get_kelas as $chart_kls) {
+            $counter = 0;
+            foreach ($chart_get_anggota_kelas as $chart_anggota) {
+                if ($chart_anggota->id_kelas == $chart_kls->id) {
+                    $counter += 1;
+                }
+            }
+            $chart_kls->total = $counter;
+            array_push($chart_get_total_kelas, $chart_kls);
+        }
+
+        $chart_total_anggota_kelas = $chart_get_anggota_kelas->count();
 
         $total_user = User::count();
         $admin = User::where('role', 'Admin')->count();
@@ -44,10 +46,8 @@ class PengurusController extends Controller
         return view('content.home', compact(
             'siswa',
             'role',
-            'kelasA',
-            'kelasB',
-            'kelasC',
-            'kelasD',
+            'chart_get_total_kelas',
+            'chart_total_anggota_kelas',
             'admin',
             'pengurus',
             'guru',

@@ -27,24 +27,25 @@ class NilaiController extends Controller
     public function index()
     {
         $role = Auth::user()->role;
-
+        $id = Auth::user()->id;
         $semester_active = Semester::select('id','tahun_ajaran')
         ->where('status',"1")->first();
         $mata_pelajaran = MataPelajaran::get();
         $nilai_siswa = Nilai::get();
+        $get_kelas = Pengajar::where([['id_user',$id],['id_semester',$semester_active->id]])->pluck('id_kelas')->toArray();
 
         if ($role == 'Guru') {
             $id = Auth::user()->id;
-            $siswa = AnggotaKelas::select('siswa.id','nama','id_semester','nama_kelas','id_guru')
+            $siswa = AnggotaKelas::select('siswa.id','nama','id_semester','nama_kelas')
             ->join('siswa','siswa.id','=','anggota_kelas.id_siswa')
             ->join('kelas','kelas.id','=','anggota_kelas.id_kelas')
-            ->where([['id_semester',$semester_active->id],['id_guru',$id]])
+            ->where([['id_semester',$semester_active->id]])
+            ->whereIn('kelas.id',$get_kelas)
             ->get();
         }else {
-            $siswa = AnggotaKelas::select('siswa.id','nama','id_semester','nama_kelas','id_guru')
+            $siswa = AnggotaKelas::select('siswa.id','nama','id_semester','nama_kelas')
             ->join('siswa','siswa.id','=','anggota_kelas.id_siswa')
             ->join('kelas','kelas.id','=','anggota_kelas.id_kelas')
-            // ->join('users','users.id','=','kelas.id_guru')
             ->where('id_semester',$semester_active->id)
             ->get();
         }
@@ -93,15 +94,15 @@ class NilaiController extends Controller
         // $this->validate($request, $rules, $customMessages);
 
         $role = Auth::user()->role;
-
-        // return $id;
+        $id = Auth::user()->id;
+        $get_kelas = Pengajar::where('id_user',$id)->pluck('id')->toArray();
 
         if ($role == 'Guru') {
             $id = Auth::user()->id;
             $semester_active = Semester::select('id','tahun_ajaran')
                             ->where('status',"1")->first();
             $kelas = Kelas::select('id','nama_kelas')
-            ->where('id_guru',$id)
+            ->whereIn('kelas.id',$get_kelas)
             ->first();
         }else {
             $kelas = Kelas::select('id','nama_kelas')
