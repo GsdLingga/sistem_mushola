@@ -41,6 +41,7 @@ Route::prefix('admin')->middleware('is_admin')->group(function(){
     Route::resource('kelas', KelasController::class);
     Route::resource('pengajar', PengajarController::class);
     Route::resource('semester', SemesterController::class);
+    Route::post('change-semester', [SemesterController::class, 'changeSemester'])->name('semester.change');
 });
 
 Route::prefix('pengurus')->middleware('is_pengurus')->group(function(){
@@ -62,5 +63,4 @@ Route::middleware('is_adminguru')->group(function () {
     Route::resource('absensi', AbsensiController::class);
     Route::resource('nilai', NilaiController::class);
     Route::post('create-pdf-file', [NilaiController::class, 'createPDF'])->name('nilai.pdf');
-
 });

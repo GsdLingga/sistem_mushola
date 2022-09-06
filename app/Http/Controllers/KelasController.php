@@ -112,7 +112,7 @@ class KelasController extends Controller
             $check = Kelas::where('nama_kelas',$lower)->first();
             if (isset($check)) {
                 if ($id == $check->id) {
-                    return redirect()->route('kelas.index')->with('success', 'Kelas Created Successfully');
+                    return redirect()->route('kelas.index')->with('success', 'Kelas Edited Successfully');
                 } else {
                     return redirect()->back()->with('error', 'Already Registered');
                 }

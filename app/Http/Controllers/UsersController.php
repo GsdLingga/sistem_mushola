@@ -4,9 +4,11 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\User;
+use App\Models\Pengajar;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Str;
+use Illuminate\Support\Facades\DB;
 
 class UsersController extends Controller
 {
@@ -137,7 +139,7 @@ class UsersController extends Controller
         }
 
         if ($selfEmail->email == $emailRequest){
-            
+
             if (isset($request->password)) {
                 $user  = User::find($id);
                 $user->name     = $request->name;
@@ -163,7 +165,7 @@ class UsersController extends Controller
         }elseif($count == 1) {
             return redirect()->back()->with('emailtaken','Email is already taken');
         }else {
-            
+
             if (isset($request->password)) {
                 $user  = User::find($id);
                 $user->name     = $request->name;
@@ -197,6 +199,17 @@ class UsersController extends Controller
      */
     public function destroy($id)
     {
-        //
+        $pengajar = Pengajar::where('id_user', $id)->pluck('id')->toArray();
+
+        DB::beginTransaction();
+        try {
+            Pengajar::destroy($pengajar);
+            User::where('id',$id)->delete();
+            DB::commit();
+            return redirect()->route('user.index')->with('success', 'User Deleted Successfully');
+        } catch (Exception $e) {
+            DB::rollback();
+            return redirect()->back()->with('error', $e);
+        }
     }
 }

@@ -47,6 +47,9 @@
             <div class="card">
                 <div class="card-body">
                     <div class="float-right">
+                        <button type="button" class="btn btn-primary waves-effect waves-light btn-sm" style="color: white;" data-toggle="modal" data-target="#exampleModal">
+                            <i class="mdi mdi-account-plus align-middle mr-2"></i> Ubah Semester Aktif
+                        </button>
                     </div>
                     <h4 class="card-title mb-4">Daftar Semester</h4>
                     <table id="datatable" class="table table-bordered dt-responsive nowrap" style="border-collapse: collapse; border-spacing: 0; width: 100%;">
@@ -80,6 +83,41 @@
         </div><!-- end col-->
     </div>
     <!-- end row-->
+    <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title" id="exampleModalLabel">Ubah Semester Aktif</h5>
+              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+              </button>
+            </div>
+            <div class="modal-body">
+              <form action="{{ route('semester.change') }}" method="POST">
+                @csrf
+                <div class="form-group">
+                    <label for="exampleFormControlSelect1">Semester</label>
+                    <select name="semester" class="form-control" id="selectSemester">
+                        <option value="">Pilih Semester</option>
+                        @foreach ($semester as $sem)
+                            <option value={{$sem->id}}>{{$sem->tahun_ajaran}}</option>
+                        @endforeach
+                        @error('semester')
+                            <span class="invalid-feedback" role="alert">
+                                <strong>{{ $message }}</strong>
+                            </span>
+                        @enderror
+                    </select>
+                </div>
+                <div class="modal-footer" id="btnDiv">
+                    {{-- <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button> --}}
+                  <button id="btnSubmit" type="submit" class="btn btn-primary" style="float: right;">Submit</button>
+                </div>
+              </form>
+            </div>
+          </div>
+        </div>
+      </div>
 @endsection
 @push('js')
     <!-- Buttons examples -->
@@ -97,5 +135,34 @@
 
     <!-- Datatable init js -->
     <script src="{{asset('assets/js/pages/datatables.init.js')}}"></script>
+
+    <script>
+        $('#myModal').on('shown.bs.modal', function () {
+            $('#myInput').trigger('focus')
+        })
+    </script>
+
+    <script>
+        let semester = document.getElementById('selectSemester');
+        $('#btnSubmit').click(function(){
+            if (semester.value === "") {
+                alert("There is an empty input")
+            }else{
+                let semesterValue = semester.value
+                $.ajax({
+                    type: "POST",
+                    url: "/change-semester",
+                    data: { "_token": "{{ csrf_token() }}",
+                    semesterValue },
+                    success: function (response) {
+                        console.log(response)
+                    },
+                    error: function (e) {
+                        console.log(e)
+                    },
+                });
+            }
+        })
+    </script>
 
 @endpush

@@ -166,8 +166,8 @@ class PengajarController extends Controller
     {
         DB::beginTransaction();
         try {
-            DB::commit();
             Pengajar::where('id',$id)->delete();
+            DB::commit();
             return redirect()->route('pengajar.index')->with('success', 'Pengajar Deleted Successfully');
         } catch (Exception $e) {
             DB::rollback();

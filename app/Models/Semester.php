@@ -13,6 +13,6 @@ class Semester extends Model
     protected $primaryKey = 'id';
     protected $fillable = [
         'tahun_ajaran',
-        'active'
+        'status'
     ];
 }
