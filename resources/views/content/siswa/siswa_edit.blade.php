@@ -16,7 +16,7 @@
                 <div class="page-title-right">
                     <ol class="breadcrumb m-0">
                         <li class="breadcrumb-item"><a href="javascript: void(0);">Siswa</a></li>
-                        <li class="breadcrumb-item active">Tambah Siswa</li>
+                        <li class="breadcrumb-item active">Edit Siswa</li>
                     </ol>
                 </div>
 
@@ -48,7 +48,7 @@
         <div class="col-xl-12">
             <div class="card">
                 <div class="card-body">
-                    <h4 class="card-title">Tambah Siswa</h4>
+                    <h4 class="card-title">Edit Siswa</h4>
                     <p class="card-title-desc">
                     </p>
                     <form class="custom-validation" action="{{ route('siswa.update', $siswa->id) }}" method="POST">

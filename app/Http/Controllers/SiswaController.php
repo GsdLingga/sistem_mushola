@@ -147,11 +147,18 @@ class SiswaController extends Controller
      */
     public function edit($id)
     {
+        $role = Auth::user()->role;
+        $id_user = Auth::user()->id;
+        $get_kelas = Pengajar::where('id_user',$id_user)->pluck('id')->toArray();
+
+        if ($role == 'Guru') {
+            $kelas = Kelas::whereIn('kelas.id',$get_kelas)->get();
+        } else {
+            $kelas = Kelas::get();
+        }
         $siswa = Siswa::select('id_siswa as id','nama','no_induk','tgl_lahir','id_kelas','jenis_kelamin','alamat','telepon')
         ->join('anggota_kelas','anggota_kelas.id_siswa','=','siswa.id')
         ->where('siswa.id','=',$id)->first();
-
-        $kelas = Kelas::get();
 
         // return $siswa;
         return view('content.siswa.siswa_edit', compact(
