@@ -147,7 +147,8 @@ class SiswaController extends Controller
      */
     public function edit($id)
     {
-        $siswa = Siswa::join('anggota_kelas','anggota_kelas.id_siswa','=','siswa.id')
+        $siswa = Siswa::select('id_siswa as id','nama','no_induk','tgl_lahir','id_kelas','jenis_kelamin','alamat','telepon')
+        ->join('anggota_kelas','anggota_kelas.id_siswa','=','siswa.id')
         ->where('siswa.id','=',$id)->first();
 
         $kelas = Kelas::get();
@@ -169,7 +170,6 @@ class SiswaController extends Controller
      */
     public function update(Request $request, $id)
     {
-        // return $request->all();
         $siswa = $request->validate([
             'name' => ['required', 'string', 'max:255'],
             'no_induk' => ['required', 'string', 'numeric'],
@@ -180,6 +180,7 @@ class SiswaController extends Controller
             'telepon' => ['required', 'string', 'numeric', 'digits_between:10,13'],
         ]);
 
+        DB::beginTransaction();
         try {
             $semester_active = Semester::select('id','tahun_ajaran')
             ->where('status',"1")->first();
@@ -198,8 +199,10 @@ class SiswaController extends Controller
             $anggota_kelas->id_kelas = $request->kelas;
             $anggota_kelas->save();
 
+            DB::commit();
             return redirect()->route('siswa.index')->with('success', 'Siswa Edit Successfully');
         } catch (Exception $e) {
+            DB::rollback();
             return redirect()->back()->with('error', $e);
         }
 

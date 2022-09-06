@@ -139,11 +139,17 @@ class AnggotaKelasController extends Controller
      */
     public function destroy($id)
     {
-        $anggota_kelas = AnggotaKelas::find($id);
-        $anggota_kelas->status = 0;
+        $get_nilai =  Nilai::whereIn('id_anggota_kelas',$id)->pluck('id')->toArray();
 
-        $anggota_kelas->save();
-
-        return redirect()->route('anggota_kelas.index')->with('success', 'Anggota Kelas Deleted Successfully');
+        DB::beginTransaction();
+        try {
+            Nilai::destroy($get_nilai);
+            AnggotaKelas::where('id',$id)->delete();
+            DB::commit();
+            return redirect()->route('anggota_kelas.index')->with('success', 'Anggota Kelas Deleted Successfully');
+        } catch (Exception $e) {
+            DB::rollback();
+            return redirect()->back()->with('error', $e);
+        }
     }
 }
